@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GreenView — Monitoramento urbano inteligente para prefeituras</title>
+<meta name="description" content="GreenView usa visão computacional e IA para identificar problemas urbanos automaticamente, a partir dos veículos que já circulam na sua cidade. Participe da validação com sua prefeitura.">
+<meta name="theme-color" content="#12433A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B231F;
+    --forest:#12433A;
+    --forest-2:#0E362F;
+    --signal:#2F9E6E;
+    --signal-light:#7FD9AE;
+    --blue:#1D4E66;
+    --blue-light:#3E7CA0;
+    --paper:#F5F3ED;
+    --paper-2:#EDEAE1;
+    --mist:#E4EEEA;
+    --amber:#C97A2B;
+    --line:rgba(11,35,31,0.12);
+    --line-strong:rgba(11,35,31,0.22);
+    --shadow:0 20px 45px -25px rgba(11,35,31,0.35);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.55;
+  }
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk',sans-serif;
+    color:var(--forest);
+    margin:0;
+    line-height:1.12;
+    letter-spacing:-0.01em;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  p{margin:0;}
+  img,svg{display:block;max-width:100%;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+  ::selection{background:var(--signal);color:#fff;}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+  .section{padding:96px 0;position:relative;}
+  @media (max-width:720px){ .section{padding:64px 0;} }
+
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--forest);opacity:.72;
+    padding-bottom:4px;
+  }
+  .eyebrow::before{
+    content:"";width:7px;height:7px;border-radius:2px;background:var(--signal);
+    box-shadow:0 0 0 3px rgba(47,158,110,.18);
+  }
+
+  /* ---- background grid texture ---- */
+  .grid-bg{
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:56px 56px;
+    background-position:-1px -1px;
+  }
+
+  /* ---- nav ---- */
+  header.site{
+    position:sticky;top:0;z-index:50;
+    background:rgba(245,243,237,.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .navrow{display:flex;align-items:center;justify-content:space-between;height:76px;}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px;color:var(--forest);}
+  .logo .mark{
+    width:30px;height:30px;border-radius:7px;background:var(--forest);
+    position:relative;overflow:hidden;flex:none;
+  }
+  .logo .mark::before,.logo .mark::after{content:"";position:absolute;background:var(--signal-light);}
+  .logo .mark::before{width:100%;height:2px;top:10px;}
+  .logo .mark::after{width:2px;height:100%;left:14px;}
+  nav.links{display:flex;gap:34px;align-items:center;}
+  nav.links a{font-size:14.5px;font-weight:500;color:var(--ink);opacity:.75;transition:opacity .15s;}
+  nav.links a:hover{opacity:1;}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:13px 24px;border-radius:8px;font-weight:600;font-size:14.5px;
+    border:1px solid transparent;transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+    white-space:nowrap;
+  }
+  .btn:focus-visible{outline:2px solid var(--signal);outline-offset:2px;}
+  .btn-primary{background:var(--forest);color:#fff;}
+  .btn-primary:hover{background:var(--forest-2);box-shadow:var(--shadow);transform:translateY(-1px);}
+  .btn-ghost{background:transparent;color:var(--forest);border-color:var(--line-strong);}
+  .btn-ghost:hover{background:var(--mist);}
+  .btn-block{width:100%;}
+  .nav-cta{display:none;}
+  @media(min-width:860px){ .nav-cta{display:inline-flex;} }
+  nav.links{display:none;}
+  @media(min-width:860px){ nav.links{display:flex;} }
+
+  /* ---- hero ---- */
+  .hero{padding:76px 0 100px;position:relative;overflow:hidden;}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;}
+  @media(max-width:940px){ .hero-grid{grid-template-columns:1fr;} }
+  .hero h1{font-size:clamp(32px,4.6vw,54px);font-weight:700;}
+  .hero .sub{margin-top:22px;font-size:17.5px;max-width:520px;color:var(--ink);opacity:.82;}
+  .hero-ctas{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap;}
+  .hero-stats{display:flex;gap:34px;margin-top:52px;flex-wrap:wrap;}
+  .hero-stats .stat b{display:block;font-family:'Space Grotesk',sans-serif;font-size:22px;color:var(--forest);}
+  .hero-stats .stat span{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.6;}
+
+  /* ---- signature scan map ---- */
+  .scanpanel{
+    background:var(--forest);border-radius:18px;padding:26px;position:relative;
+    box-shadow:var(--shadow);
+  }
+  .scanpanel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+  .scanpanel-head .tag{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;
+    color:var(--signal-light);border:1px solid rgba(127,217,174,.35);
+    padding:4px 9px;border-radius:100px;display:inline-flex;align-items:center;gap:6px;
+  }
+  .scanpanel-head .tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--signal-light);animation:pulseDot 1.8s infinite;}
+  .scanpanel-head .coords{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.45);}
+  @keyframes pulseDot{0%,100%{opacity:1;}50%{opacity:.3;}}
+  .map-frame{
+    background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+    border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden;
+  }
+  .detect-chip{
+    position:absolute;background:#fff;color:var(--forest);font-family:'IBM Plex Mono',monospace;
+    font-size:11px;padding:6px 10px;border-radius:6px;box-shadow:0 8px 18px rgba(0,0,0,.25);
+    opacity:0;animation:chipFade 6s infinite;font-weight:500;
+  }
+  @keyframes chipFade{
+    0%,100%{opacity:0;transform:translateY(4px);}
+    8%,32%{opacity:1;transform:translateY(0);}
+    40%{opacity:0;transform:translateY(-4px);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;}
+  }
+
+  /* ---- reveal on scroll ---- */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ---- section head ---- */
+  .sec-head{max-width:640px;margin-bottom:56px;}
+  .sec-head h2{font-size:clamp(26px,3.4vw,38px);}
+  .sec-head p{margin-top:14px;font-size:16.5px;opacity:.78;}
+
+  /* ---- como funciona ---- */
+  .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative;}
+  @media(max-width:920px){ .flow{grid-template-columns:1fr;gap:20px;} }
+  .flow-step{position:relative;padding:0 16px;text-align:left;}
+  .flow-step .num{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--signal);
+    background:var(--mist);width:30px;height:30px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;margin-bottom:16px;border:1px solid var(--line-strong);
+  }
+  .flow-step h4{font-size:15.5px;margin-bottom:6px;}
+  .flow-step p{font-size:13.5px;opacity:.7;}
+  .flow-line{
+    position:absolute;top:15px;left:calc(10% + 30px);right:calc(10% + 30px);
+    height:1px;background:repeating-linear-gradient(90deg, var(--line-strong) 0 6px, transparent 6px 12px);
+  }
+  @media(max-width:920px){ .flow-line{display:none;} }
+
+  /* ---- MVP ---- */
+  .mvp-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;}
+  @media(max-width:940px){ .mvp-grid{grid-template-columns:1fr;} }
+  .mvp-card{
+    background:var(--forest);border-radius:16px;padding:20px;box-shadow:var(--shadow);
+  }
+  .mvp-video{
+    aspect-ratio:16/10;border-radius:10px;border:1px solid rgba(255,255,255,.1);
+    background:linear-gradient(135deg, #0E362F, #123F35);
+    position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
+  }
+  .playbtn{
+    width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;
+    backdrop-filter:blur(4px);
+  }
+  .mvp-list{margin-top:26px;display:flex;flex-direction:column;gap:14px;}
+  .mvp-list li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;list-style:none;opacity:.85;}
+  .mvp-list li svg{flex:none;margin-top:2px;}
+
+  /* ---- benefícios ---- */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  @media(max-width:900px){ .cards{grid-template-columns:1fr 1fr;} }
+  @media(max-width:600px){ .cards{grid-template-columns:1fr;} }
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:14px;padding:28px;
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  }
+  .card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:transparent;}
+  .card .ic{
+    width:42px;height:42px;border-radius:10px;background:var(--mist);
+    display:flex;align-items:center;justify-content:center;margin-bottom:18px;color:var(--forest);
+  }
+  .card h4{font-size:16.5px;margin-bottom:8px;}
+  .card p{font-size:14px;opacity:.72;}
+
+  /* ---- roadmap ---- */
+  .roadmap{border-top:1px solid var(--line);}
+  .rm-item{
+    display:grid;grid-template-columns:120px 1fr auto;gap:18px;align-items:center;
+    padding:22px 0;border-bottom:1px solid var(--line);
+  }
+  @media(max-width:640px){ .rm-item{grid-template-columns:1fr;gap:8px;} }
+  .rm-status{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;}
+  .rm-status.done{color:var(--signal);}
+  .rm-status.wip{color:var(--amber);}
+  .rm-name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:var(--forest);}
+  .rm-desc{font-size:13.5px;opacity:.65;margin-top:4px;}
+  .pill{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;padding:5px 11px;border-radius:100px;
+    border:1px solid var(--line-strong);white-space:nowrap;justify-self:end;
+  }
+  .pill.done{color:var(--signal);border-color:rgba(47,158,110,.4);background:rgba(47,158,110,.08);}
+  .pill.wip{color:var(--amber);border-color:rgba(201,122,43,.35);background:rgba(201,122,43,.08);}
+
+  /* ---- formulário / wizard ---- */
+  .formsection{background:var(--forest);border-radius:22px;padding:0;overflow:hidden;position:relative;}
+  .formsection::before{
+    content:"";position:absolute;inset:0;
+    background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size:44px 44px;pointer-events:none;
+  }
+  .form-inner{position:relative;padding:52px 44px 44px;}
+  @media(max-width:640px){ .form-inner{padding:34px 20px 28px;} }
+  .form-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;margin-bottom:8px;}
+  .form-head h2{color:#fff;font-size:clamp(22px,3vw,30px);}
+  .step-label{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--signal-light);}
+  .progress-track{height:4px;background:rgba(255,255,255,.14);border-radius:100px;margin:22px 0 40px;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--signal-light);border-radius:100px;transition:width .4s ease;}
+
+  .card-form{
+    background:var(--paper);border-radius:16px;padding:36px;
+    box-shadow:0 30px 60px -30px rgba(0,0,0,.4);
+  }
+  @media(max-width:640px){ .card-form{padding:22px;} }
+  .step{display:none;}
+  .step.active{display:block;animation:stepIn .35s ease;}
+  @keyframes stepIn{from{opacity:0;transform:translateX(8px);}to{opacity:1;transform:translateX(0);}}
+  .step h3{font-size:19px;margin-bottom:22px;}
+  .field{margin-bottom:20px;}
+  .field label{display:block;font-size:13px;font-weight:600;margin-bottom:8px;color:var(--forest);}
+  .field .hint{font-size:12px;opacity:.6;font-weight:400;margin-top:4px;display:block;}
+  .field input[type=text], .field input[type=email], .field input[type=tel], .field select, .field textarea{
+    width:100%;padding:12px 14px;border-radius:8px;border:1px solid var(--line-strong);
+    background:#fff;font-family:inherit;font-size:14.5px;color:var(--ink);
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:none;border-color:var(--signal);box-shadow:0 0 0 3px rgba(47,158,110,.15);
+  }
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:560px){ .row2{grid-template-columns:1fr;} }
+  .opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  @media(max-width:560px){ .opt-grid{grid-template-columns:1fr;} }
+  .opt{
+    display:flex;align-items:center;gap:10px;border:1px solid var(--line-strong);border-radius:8px;
+    padding:12px 14px;font-size:14px;cursor:pointer;background:#fff;transition:border-color .15s, background .15s;
+  }
+  .opt:hover{border-color:var(--signal);}
+  .opt input{accent-color:var(--forest);}
+  .opt.checked{border-color:var(--signal);background:rgba(47,158,110,.07);}
+  .scale{display:flex;gap:10px;}
+  .scale button{
+    flex:1;padding:14px 0;border-radius:8px;border:1px solid var(--line-strong);background:#fff;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;color:var(--forest);
+  }
+  .scale button.sel{background:var(--forest);color:#fff;border-color:var(--forest);}
+  .step-nav{display:flex;justify-content:space-between;gap:12px;margin-top:30px;}
+  .step-nav .spacer{flex:1;}
+
+  .thankyou{display:none;text-align:center;padding:20px 6px 6px;}
+  .thankyou.active{display:block;}
+  .thankyou .ic-big{
+    width:56px;height:56px;border-radius:50%;background:var(--mist);color:var(--signal);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
+  }
+  .thankyou h3{font-size:22px;margin-bottom:10px;}
+  .thankyou p{opacity:.75;font-size:14.5px;max-width:420px;margin:0 auto;}
+  .thankyou .btn{margin-top:26px;}
+
+  footer.site{border-top:1px solid var(--line);padding:44px 0;}
+  .foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+  .foot-row .mono{font-size:12px;opacity:.55;}
+
+  .field-error{border-color:#C24444 !important;}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap navrow">
+    <a href="#top" class="logo"><span class="mark" aria-hidden="true"></span>GreenView</a>
+    <nav class="links" aria-label="Navegação principal">
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#mvp">MVP</a>
+      <a href="#beneficios">Benefícios</a>
+      <a href="#roadmap">Roadmap</a>
+    </nav>
+    <a href="pesquisa.html" class="btn btn-primary nav-cta">Responder pesquisa</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero grid-bg">
+    <div class="wrap hero-grid">
+      <div class="reveal in">
+        <span class="eyebrow">Plataforma de monitoramento urbano</span>
+        <h1>Transformando cidades através da Inteligência Artificial.</h1>
+        <p class="sub">O GreenView identifica problemas urbanos automaticamente — a partir dos veículos que já circulam todos os dias na sua cidade. Sem novos equipamentos, sem novas rotas.</p>
+        <div class="hero-ctas">
+          <a href="pesquisa.html" class="btn btn-primary">Responder pesquisa</a>
+          <a href="#como-funciona" class="btn btn-ghost">Conhecer a solução</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><b>01</b><span>Módulo em operação</span></div>
+          <div class="stat"><b>05</b><span>Módulos no roadmap</span></div>
+          <div class="stat"><b>100%</b><span>Frota já existente</span></div>
+        </div>
+      </div>
+
+      <div class="reveal in" style="animation-delay:.1s">
+        <div class="scanpanel">
+          <div class="scanpanel-head">
+            <span class="tag">Varredura ativa</span>
+            <span class="coords">LAT -23.55 · LON -46.63</span>
+          </div>
+          <div class="map-frame">
+            <svg viewBox="0 0 400 320" width="100%" role="img" aria-label="Mapa esquemático de varredura urbana com detecção automática de mato alto">
+              <defs>
+                <pattern id="streetgrid" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <path d="M40 0H0V40" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+                </pattern>
+              </defs>
+              <rect width="400" height="320" fill="url(#streetgrid)"/>
+              <!-- main avenues -->
+              <path d="M0 90 H400 M0 210 H400 M110 0 V320 M290 0 V320" stroke="rgba(255,255,255,0.14)" stroke-width="2"/>
+              <!-- vehicle route -->
+              <path id="route" d="M20 90 H110 V210 H290 V90 H380" fill="none" stroke="var(--signal-light)" stroke-width="2" stroke-dasharray="3 6" opacity="0.55"/>
+              <!-- detection zone (mato alto) -->
+              <polygon points="150,150 190,150 195,190 145,190" fill="rgba(47,158,110,0.28)" stroke="var(--signal-light)" stroke-width="1.3"/>
+              <circle cx="170" cy="170" r="10" fill="none" stroke="var(--signal-light)" stroke-width="1.5">
+                <animate attributeName="r" values="8;26;8" dur="3s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.9;0;0.9" dur="3s" repeatCount="indefinite"/>
+              </circle>
+              <!-- vehicle -->
+              <circle r="5.5" fill="#fff">
+                <animateMotion dur="7s" repeatCount="indefinite" path="M20 90 H110 V210 H290 V90 H380"/>
+              </circle>
+            </svg>
+          </div>
+          <div style="margin-top:14px;display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.5);">
+            <span>Veículo 04 · Rota Norte</span>
+            <span>Mato alto: 1 ocorrência</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section class="section" id="como-funciona">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Como funciona</span>
+        <h2>De uma rota de rotina a um mapa de decisão.</h2>
+        <p>O GreenView acopla captura de imagem e IA ao trajeto que a frota municipal já percorre — transformando cada viagem em uma leitura contínua da cidade.</p>
+      </div>
+      <div class="flow reveal">
+        <div class="flow-line" aria-hidden="true"></div>
+        <div class="flow-step">
+          <span class="num">01</span>
+          <h4>Veículos da cidade</h4>
+          <p>Caminhões de coleta, fiscalização e frotas municipais já em circulação.</p>
+        </div>
+        <div class="flow-step">
+          <span class="num">02</span>
+          <h4>Captura de imagens</h4>
+          <p>Câmeras acopladas registram o entorno automaticamente, sem intervenção do motorista.</p>
+        </div>
+        <div class="flow-step">
+          <span class="num">03</span>
+          <h4>Inteligência Artificial</h4>
+          <p>Modelos de visão computacional identificam padrões de ocorrência em tempo real.</p>
+        </div>
+        <div class="flow-step">
+          <span class="num">04</span>
+          <h4>Mapa inteligente</h4>
+          <p>Ocorrências são geolocalizadas e priorizadas automaticamente por severidade.</p>
+        </div>
+        <div class="flow-step">
+          <span class="num">05</span>
+          <h4>Gestão pública</h4>
+          <p>A secretaria responsável recebe alertas prontos para ação, sem fiscalização manual.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MVP -->
+  <section class="section" id="mvp" style="background:var(--mist);">
+    <div class="wrap mvp-grid">
+      <div class="reveal">
+        <div class="mvp-card">
+          <div class="mvp-video">
+            <button class="playbtn" aria-label="Reproduzir vídeo de demonstração do MVP">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 5.5V18.5L19 12L7 5.5Z" fill="#fff"/></svg>
+            </button>
+          </div>
+        </div>
+        <p class="mono" style="font-size:11.5px;opacity:.55;margin-top:12px;">Espaço reservado para vídeo/GIF de demonstração do MVP em operação.</p>
+      </div>
+      <div class="reveal" style="animation-delay:.1s">
+        <span class="eyebrow">MVP em operação</span>
+        <h2 style="font-size:clamp(24px,3.2vw,34px);">Nosso MVP já identifica automaticamente áreas com mato alto, usando Inteligência Artificial.</h2>
+        <ul class="mvp-list">
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#2F9E6E" stroke-width="1.6"/><path d="M8 12.5L10.8 15L16 9" stroke="#2F9E6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Detecção validada em campo, sem depender de denúncias da população.</span>
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#2F9E6E" stroke-width="1.6"/><path d="M8 12.5L10.8 15L16 9" stroke="#2F9E6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Funciona com câmeras acopladas a veículos já em circulação.</span>
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#2F9E6E" stroke-width="1.6"/><path d="M8 12.5L10.8 15L16 9" stroke="#2F9E6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Arquitetura pensada para receber novos módulos de detecção.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFÍCIOS -->
+  <section class="section" id="beneficios">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Benefícios</span>
+        <h2>O que muda na rotina da secretaria.</h2>
+        <p>Menos deslocamento dedicado à fiscalização, mais tempo para quem decide e executa.</p>
+      </div>
+      <div class="cards reveal">
+        <div class="card">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 4L21 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10V20H19V10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h4>Redução de custos</h4>
+          <p>Sem deslocamentos exclusivos para fiscalização, o custo por ocorrência identificada cai.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2.4" fill="currentColor"/></svg></div>
+          <h4>Fiscalização contínua</h4>
+          <p>A cidade é lida todos os dias, não apenas quando há uma denúncia ou vistoria agendada.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3V21M3 12H21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/></svg></div>
+          <h4>Maior cobertura</h4>
+          <p>Cada rota já percorrida amplia a área monitorada sem esforço adicional da equipe.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 19L9 9L14 15L20 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h4>Priorização automática</h4>
+          <p>Ocorrências são ordenadas por severidade e tempo em aberto, sem triagem manual.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 4V20H20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 16L12 10L15 13L19 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h4>Decisão baseada em dados</h4>
+          <p>Histórico de ocorrências por bairro apoia planejamento orçamentário e de equipes.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L14.4 8.6L21 9.3L16 13.8L17.5 20.5L12 17L6.5 20.5L8 13.8L3 9.3L9.6 8.6L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+          <h4>Cidade mais eficiente</h4>
+          <p>Recursos públicos direcionados para onde realmente há ocorrência, não onde há suspeita.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section class="section roadmap" id="roadmap" style="background:var(--mist);">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Roadmap de módulos</span>
+        <h2>Um módulo em operação. Quatro a caminho.</h2>
+        <p>A ordem dos próximos módulos será ajustada de acordo com as respostas desta pesquisa.</p>
+      </div>
+      <div class="reveal">
+        <div class="rm-item">
+          <span class="rm-status done">Módulo 01</span>
+          <div><span class="rm-name">Mato alto</span><div class="rm-desc">Em operação — validado em campo com o MVP atual.</div></div>
+          <span class="pill done">MVP ativo</span>
+        </div>
+        <div class="rm-item">
+          <span class="rm-status wip">Módulo 02</span>
+          <div><span class="rm-name">Buracos e pavimentação</span><div class="rm-desc">Detecção de deterioração e falhas no asfalto.</div></div>
+          <span class="pill wip">Em desenvolvimento</span>
+        </div>
+        <div class="rm-item">
+          <span class="rm-status wip">Módulo 03</span>
+          <div><span class="rm-name">Qualidade do ar</span><div class="rm-desc">Monitoramento contínuo de indicadores ambientais.</div></div>
+          <span class="pill wip">Em desenvolvimento</span>
+        </div>
+        <div class="rm-item">
+          <span class="rm-status wip">Módulo 04</span>
+          <div><span class="rm-name">Descarte irregular</span><div class="rm-desc">Identificação automática de pontos de descarte.</div></div>
+          <span class="pill wip">Em desenvolvimento</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAMADA PARA A PESQUISA -->
+  <section class="section" id="formulario">
+    <div class="wrap">
+      <div class="formsection reveal">
+        <div class="form-inner" style="padding-bottom:52px;">
+          <span class="mono" style="display:inline-flex;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--signal-light);border:1px solid rgba(127,217,174,.35);padding:5px 11px;border-radius:100px;margin-bottom:18px;">Pesquisa de validação</span>
+          <h2 style="color:#fff;max-width:560px;">Ajude a validar o GreenView com sua prefeitura.</h2>
+          <p style="color:rgba(255,255,255,.68);font-size:15.5px;max-width:520px;margin-top:14px;">Uma pesquisa completa de 5 etapas sobre o problema, o processo atual e o interesse em um projeto piloto. Leva cerca de 5 minutos e seu progresso é salvo automaticamente.</p>
+
+          <div style="display:flex;gap:34px;flex-wrap:wrap;margin-top:34px;">
+            <div class="mono" style="color:rgba(255,255,255,.55);font-size:12px;">✓ Progresso salvo automaticamente</div>
+            <div class="mono" style="color:rgba(255,255,255,.55);font-size:12px;">✓ Dados tratados conforme a LGPD</div>
+            <div class="mono" style="color:rgba(255,255,255,.55);font-size:12px;">✓ Usados apenas para pesquisa e desenvolvimento</div>
+          </div>
+
+          <a href="pesquisa.html" class="btn btn-primary" style="margin-top:36px;background:#fff;color:var(--forest);">Iniciar pesquisa completa</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap foot-row">
+    <a href="#top" class="logo"><span class="mark" aria-hidden="true"></span>GreenView</a>
+    <span class="mono">Projeto em pré-incubação · Pesquisa de validação de mercado</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // ---------- scroll reveal ----------
+  var revealEls = document.querySelectorAll('.reveal:not(.in)');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:.15});
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  // ---------- opt highlight ----------
+  document.querySelectorAll('.opt input').forEach(function(input){
+    input.addEventListener('change', function(){
+      var name = input.name;
+      document.querySelectorAll('.opt input[name="'+name+'"]').forEach(function(i){
+        i.closest('.opt').classList.toggle('checked', i.checked);
+      });
+      if(input.type === 'checkbox'){
+        input.closest('.opt').classList.toggle('checked', input.checked);
+      }
+    });
+  });
+
+  // ---------- scale 1-5 ----------
+  var scaleVal = null;
+  document.getElementById('scaleGroup').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if(!btn) return;
+    scaleVal = btn.dataset.val;
+    this.querySelectorAll('button').forEach(function(b){ b.classList.toggle('sel', b === btn); });
+  });
+
+  // ---------- wizard ----------
+  var totalSteps = 5;
+  var current = 1;
+  var steps = document.querySelectorAll('.step');
+  var stepLabel = document.getElementById('stepLabel');
+  var progressFill = document.getElementById('progressFill');
+  var btnBack = document.getElementById('btnBack');
+  var btnNext = document.getElementById('btnNext');
+  var btnSubmit = document.getElementById('btnSubmit');
+  var form = document.getElementById('valForm');
+  var thankyou = document.getElementById('thankyou');
+
+  function render(){
+    steps.forEach(function(s){ s.classList.toggle('active', Number(s.dataset.step) === current); });
+    stepLabel.textContent = 'ETAPA ' + current + ' DE ' + totalSteps;
+    progressFill.style.width = (current/totalSteps*100) + '%';
+    btnBack.style.visibility = current === 1 ? 'hidden' : 'visible';
+    btnNext.style.display = current === totalSteps ? 'none' : 'inline-flex';
+    btnSubmit.style.display = current === totalSteps ? 'inline-flex' : 'none';
+  }
+
+  function validateStep(){
+    var activeStep = document.querySelector('.step[data-step="'+current+'"]');
+    var required = activeStep.querySelectorAll('[required]');
+    var ok = true;
+    required.forEach(function(field){
+      field.classList.remove('field-error');
+      if(!field.value){ field.classList.add('field-error'); ok = false; }
+    });
+    if(!ok){
+      var firstError = activeStep.querySelector('.field-error');
+      if(firstError) firstError.focus();
+    }
+    return ok;
+  }
+
+  btnNext.addEventListener('click', function(){
+    if(!validateStep()) return;
+    if(current < totalSteps){ current++; render(); }
+    document.querySelector('.form-inner').scrollIntoView({behavior:'smooth', block:'start'});
+  });
+  btnBack.addEventListener('click', function(){
+    if(current > 1){ current--; render(); }
+  });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if(!validateStep()) return;
+
+    // Collect all responses into a structured object.
+    // NOTE: replace this stub with a real integration (Firebase / Supabase / PostgreSQL / Google Sheets).
+    var data = Object.fromEntries(new FormData(form).entries());
+    data.func = Array.from(form.querySelectorAll('[name="func"]:checked')).map(function(i){ return i.value; });
+    data.escalaUtilidade = scaleVal;
+    data.timestamp = new Date().toISOString();
+
+    // submitFormData(data) -> integração futura entra aqui.
+    console.log('GreenView — resposta de validação coletada:', data);
+
+    form.style.display = 'none';
+    thankyou.classList.add('active');
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
