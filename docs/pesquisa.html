@@ -1,860 +1,2402 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pesquisa de Validação — GreenView</title>
-<meta name="description" content="Pesquisa de validação do GreenView para representantes de prefeituras brasileiras. Leva cerca de 5 minutos.">
-<meta name="theme-color" content="#12433A">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --ink:#0B231F; --forest:#12433A; --forest-2:#0E362F;
-    --signal:#2F9E6E; --signal-light:#7FD9AE;
-    --blue:#1D4E66; --blue-light:#3E7CA0;
-    --paper:#F5F3ED; --paper-2:#EDEAE1; --mist:#E4EEEA;
-    --amber:#C97A2B; --danger:#C24444;
-    --line:rgba(11,35,31,0.12); --line-strong:rgba(11,35,31,0.22);
-    --shadow:0 20px 45px -25px rgba(11,35,31,0.35);
-  }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;}
-  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;color:var(--forest);margin:0;line-height:1.15;letter-spacing:-0.01em;}
-  .mono{font-family:'IBM Plex Mono',monospace;}
-  p{margin:0;}
-  a{color:inherit;}
-  button{font-family:inherit;cursor:pointer;}
-  ::selection{background:var(--signal);color:#fff;}
-  .wrap{max-width:760px;margin:0 auto;padding:0 20px;}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pesquisa de Validação — GreenView</title>
+    <meta
+      name="description"
+      content="Pesquisa de validação do GreenView para representantes de prefeituras brasileiras. Leva cerca de 5 minutos."
+    />
+    <meta name="theme-color" content="#12433A" />
 
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:8px;font-weight:600;font-size:14.5px;border:1px solid transparent;transition:transform .15s ease, box-shadow .15s ease, background .15s ease;white-space:nowrap;}
-  .btn:focus-visible{outline:2px solid var(--signal);outline-offset:2px;}
-  .btn-primary{background:var(--forest);color:#fff;}
-  .btn-primary:hover{background:var(--forest-2);box-shadow:var(--shadow);transform:translateY(-1px);}
-  .btn-ghost{background:transparent;color:var(--forest);border-color:var(--line-strong);}
-  .btn-ghost:hover{background:var(--mist);}
-  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none !important;box-shadow:none !important;}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
 
-  /* header band */
-  .headband{background:var(--forest);position:relative;overflow:hidden;padding:56px 0 40px;}
-  .headband::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);background-size:44px 44px;}
-  .headband .wrap{position:relative;}
-  .brandline{display:flex;align-items:center;gap:10px;margin-bottom:26px;}
-  .brandline .mark{width:26px;height:26px;border-radius:6px;background:rgba(255,255,255,.12);position:relative;flex:none;}
-  .brandline .mark::before,.brandline .mark::after{content:"";position:absolute;background:var(--signal-light);}
-  .brandline .mark::before{width:100%;height:2px;top:8px;}
-  .brandline .mark::after{width:2px;height:100%;left:12px;}
-  .brandline span{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;font-size:16px;}
-  .headband h1{color:#fff;font-size:clamp(26px,4vw,36px);}
-  .headband p.lead{color:rgba(255,255,255,.72);margin-top:14px;font-size:15px;max-width:600px;}
-  .badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
-  .badge{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.03em;color:var(--signal-light);border:1px solid rgba(127,217,174,.32);padding:6px 11px;border-radius:100px;}
-  .metabar{display:flex;flex-wrap:wrap;gap:18px;margin-top:26px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(255,255,255,.55);}
-  .metabar b{color:var(--signal-light);font-weight:500;}
+    <style>
+      :root {
+        --ink: #0b231f;
+        --forest: #12433a;
+        --forest-2: #0e362f;
+        --signal: #2f9e6e;
+        --signal-light: #7fd9ae;
+        --blue: #1d4e66;
+        --blue-light: #3e7ca0;
+        --paper: #f5f3ed;
+        --paper-2: #edeae1;
+        --mist: #e4eeea;
+        --amber: #c97a2b;
+        --danger: #c24444;
+        --line: rgba(11, 35, 31, 0.12);
+        --line-strong: rgba(11, 35, 31, 0.22);
+        --shadow: 0 20px 45px -25px rgba(11, 35, 31, 0.35);
+      }
 
-  /* survey card */
-  .surveywrap{padding:0 0 90px;margin-top:-30px;position:relative;}
-  .surveycard{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:38px;}
-  @media(max-width:640px){ .surveycard{padding:22px;border-radius:12px;} }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "Inter", system-ui, sans-serif;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+      }
 
-  .resume-banner{display:none;align-items:center;justify-content:space-between;gap:12px;background:var(--mist);border:1px solid var(--line-strong);border-radius:10px;padding:12px 16px;margin-bottom:24px;font-size:13.5px;}
-  .resume-banner.show{display:flex;}
-  .resume-banner button{background:none;border:none;color:var(--forest);font-weight:600;font-size:13px;text-decoration:underline;padding:0;}
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: "Space Grotesk", sans-serif;
+        color: var(--forest);
+        margin: 0;
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+      }
 
-  .progresshead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;flex-wrap:wrap;gap:6px;}
-  .progresshead .steplabel{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;color:var(--forest);}
-  .progresshead .remaining{font-family:'IBM Plex Mono',monospace;font-size:11.5px;opacity:.6;}
-  .progress-track{height:5px;background:var(--mist);border-radius:100px;overflow:hidden;margin-bottom:8px;}
-  .progress-fill{height:100%;background:var(--signal);border-radius:100px;transition:width .4s ease;width:20%;}
-  .stepdots{display:flex;gap:6px;margin-bottom:30px;}
-  .stepdots span{height:4px;flex:1;border-radius:100px;background:var(--mist);}
-  .stepdots span.done{background:var(--signal);}
-  .stepdots span.current{background:var(--forest);}
+      .mono {
+        font-family: "IBM Plex Mono", monospace;
+      }
+      p {
+        margin: 0;
+      }
+      a {
+        color: inherit;
+      }
+      button {
+        font-family: inherit;
+        cursor: pointer;
+      }
 
-  .step{display:none;}
-  .step.active{display:block;animation:stepIn .35s ease;}
-  @keyframes stepIn{from{opacity:0;transform:translateX(10px);}to{opacity:1;transform:translateX(0);}}
-  .step-intro{margin-bottom:26px;}
-  .step-intro .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--signal);}
-  .step-intro h2{font-size:21px;margin-top:6px;}
-  .step-intro p{font-size:13.5px;opacity:.65;margin-top:6px;}
+      ::selection {
+        background: var(--signal);
+        color: #fff;
+      }
 
-  .field{margin-bottom:22px;}
-  .field label{display:block;font-size:13.5px;font-weight:600;margin-bottom:8px;color:var(--forest);}
-  .field .req{color:var(--danger);margin-left:2px;}
-  .field .hint{display:block;font-size:12px;font-weight:400;opacity:.6;margin-top:5px;}
-  .field .errmsg{display:none;font-size:12px;color:var(--danger);margin-top:6px;}
-  .field.invalid .errmsg{display:block;}
-  .field input[type=text], .field input[type=email], .field input[type=tel], .field input[type=number], .field select, .field textarea{
-    width:100%;padding:12px 14px;border-radius:8px;border:1px solid var(--line-strong);background:#fff;font-family:inherit;font-size:14.5px;color:var(--ink);
-  }
-  .field input:focus, .field select:focus, .field textarea:focus{outline:none;border-color:var(--signal);box-shadow:0 0 0 3px rgba(47,158,110,.15);}
-  .field.invalid input, .field.invalid select, .field.invalid textarea{border-color:var(--danger);}
-  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
-  @media(max-width:560px){ .row2, .row3{grid-template-columns:1fr;} }
+      .wrap {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
 
-  .opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  @media(max-width:560px){ .opt-grid{grid-template-columns:1fr;} }
-  .opt-grid.cols3{grid-template-columns:repeat(3,1fr);}
-  @media(max-width:560px){ .opt-grid.cols3{grid-template-columns:1fr;} }
-  .opt{display:flex;align-items:center;gap:10px;border:1px solid var(--line-strong);border-radius:8px;padding:12px 14px;font-size:14px;cursor:pointer;background:#fff;transition:border-color .15s, background .15s;}
-  .opt:hover{border-color:var(--signal);}
-  .opt input{accent-color:var(--forest);}
-  .opt.checked{border-color:var(--signal);background:rgba(47,158,110,.07);}
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 13px 22px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14.5px;
+        border: 1px solid transparent;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease,
+          background 0.15s ease;
+        white-space: nowrap;
+      }
 
-  .likert-row{border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:12px;}
-  .likert-row .lq{font-size:14px;font-weight:500;margin-bottom:12px;}
-  .likert-scale{display:flex;align-items:center;gap:8px;}
-  .likert-scale .lend{font-family:'IBM Plex Mono',monospace;font-size:10.5px;opacity:.55;white-space:nowrap;}
-  .likert-opts{display:flex;gap:6px;flex:1;justify-content:center;}
-  .likert-opts label{position:relative;}
-  .likert-opts input{position:absolute;opacity:0;inset:0;cursor:pointer;}
-  .likert-opts span{
-    display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;
-    border:1px solid var(--line-strong);font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--forest);
-  }
-  .likert-opts input:checked + span{background:var(--forest);color:#fff;border-color:var(--forest);}
-  @media(max-width:560px){ .likert-scale{flex-wrap:wrap;} .lend{width:100%;text-align:center;} }
+      .btn:focus-visible {
+        outline: 2px solid var(--signal);
+        outline-offset: 2px;
+      }
 
-  .scale5{display:flex;gap:8px;}
-  .scale5 button{flex:1;padding:14px 0;border-radius:8px;border:1px solid var(--line-strong);background:#fff;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;color:var(--forest);}
-  .scale5 button.sel{background:var(--forest);color:#fff;border-color:var(--forest);}
+      .btn-primary {
+        background: var(--forest);
+        color: #fff;
+      }
 
-  .mvp-video{aspect-ratio:16/9;border-radius:10px;background:linear-gradient(135deg,#0E362F,#123F35);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
-  .playbtn{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);display:flex;align-items:center;justify-content:center;}
+      .btn-primary:hover {
+        background: var(--forest-2);
+        box-shadow: var(--shadow);
+        transform: translateY(-1px);
+      }
 
-  .step-nav{display:flex;justify-content:space-between;gap:12px;margin-top:32px;padding-top:24px;border-top:1px solid var(--line);}
-  .step-nav .spacer{flex:1;}
-  .conditional{margin-top:10px;display:none;}
-  .conditional.show{display:block;}
+      .btn-ghost {
+        background: transparent;
+        color: var(--forest);
+        border-color: var(--line-strong);
+      }
 
-  .thankyou{display:none;text-align:center;padding:10px 4px;}
-  .thankyou.active{display:block;}
-  .thankyou .ic-big{width:56px;height:56px;border-radius:50%;background:var(--mist);color:var(--signal);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;}
-  .thankyou h2{font-size:23px;margin-bottom:10px;}
-  .thankyou p{opacity:.72;font-size:14.5px;max-width:440px;margin:0 auto;}
-  .thankyou .tybtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px;}
-  .sharefeedback{font-size:12px;color:var(--signal);margin-top:10px;height:14px;}
+      .btn-ghost:hover {
+        background: var(--mist);
+      }
 
-  footer.site{padding:34px 0;text-align:center;}
-  footer.site .mono{font-size:11.5px;opacity:.5;}
+      .btn:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+      }
 
-  @media (prefers-reduced-motion: reduce){ *{animation-duration:.001ms !important;transition-duration:.001ms !important;} }
-</style>
-</head>
-<body>
+      .headband {
+        background: var(--forest);
+        position: relative;
+        overflow: hidden;
+        padding: 56px 0 40px;
+      }
 
-<div class="headband">
-  <div class="wrap">
-    <div class="brandline"><span class="mark" aria-hidden="true"></span><span>GreenView</span></div>
-    <h1>Pesquisa de Validação — GreenView</h1>
-    <p class="lead">Esta pesquisa faz parte do processo de desenvolvimento do GreenView, uma plataforma de monitoramento urbano baseada em Inteligência Artificial. Seu objetivo é compreender os desafios enfrentados pelos municípios e validar soluções que possam apoiar a gestão pública. O preenchimento leva aproximadamente 5 minutos.</p>
-    <div class="badges">
-      <span class="badge">Projeto em pré-incubação</span>
-      <span class="badge">Dados usados apenas para pesquisa e desenvolvimento</span>
-      <span class="badge">LGPD · tratamento confidencial</span>
-    </div>
-    <div class="metabar">
-      <span><b>~5 min</b> de preenchimento</span>
-      <span>5 etapas</span>
-      <span>Progresso salvo automaticamente neste navegador</span>
-    </div>
-  </div>
-</div>
+      .headband::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        background-size: 44px 44px;
+      }
 
-<div class="surveywrap">
-  <div class="wrap">
-    <div class="surveycard">
+      .headband .wrap {
+        position: relative;
+      }
 
-      <div class="resume-banner" id="resumeBanner">
-        <span>Encontramos respostas salvas de uma sessão anterior. Continuamos de onde você parou.</span>
-        <button type="button" id="btnClearSave">Limpar e recomeçar</button>
+      .brandline {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 26px;
+      }
+
+      .brandline .mark {
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.12);
+        position: relative;
+        flex: none;
+      }
+
+      .brandline .mark::before,
+      .brandline .mark::after {
+        content: "";
+        position: absolute;
+        background: var(--signal-light);
+      }
+
+      .brandline .mark::before {
+        width: 100%;
+        height: 2px;
+        top: 8px;
+      }
+
+      .brandline .mark::after {
+        width: 2px;
+        height: 100%;
+        left: 12px;
+      }
+
+      .brandline span {
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        color: #fff;
+        font-size: 16px;
+      }
+
+      .headband h1 {
+        color: #fff;
+        font-size: clamp(26px, 4vw, 36px);
+      }
+
+      .headband p.lead {
+        color: rgba(255, 255, 255, 0.72);
+        margin-top: 14px;
+        font-size: 15px;
+        max-width: 600px;
+      }
+
+      .badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 24px;
+      }
+
+      .badge {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.03em;
+        color: var(--signal-light);
+        border: 1px solid rgba(127, 217, 174, 0.32);
+        padding: 6px 11px;
+        border-radius: 100px;
+      }
+
+      .metabar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-top: 26px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.55);
+      }
+
+      .metabar b {
+        color: var(--signal-light);
+        font-weight: 500;
+      }
+
+      .surveywrap {
+        padding: 0 0 90px;
+        margin-top: -30px;
+        position: relative;
+      }
+
+      .surveycard {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        padding: 38px;
+      }
+
+      @media (max-width: 640px) {
+        .surveycard {
+          padding: 22px;
+          border-radius: 12px;
+        }
+      }
+
+      .resume-banner {
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        background: var(--mist);
+        border: 1px solid var(--line-strong);
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 24px;
+        font-size: 13.5px;
+      }
+
+      .resume-banner.show {
+        display: flex;
+      }
+
+      .resume-banner button {
+        background: none;
+        border: none;
+        color: var(--forest);
+        font-weight: 600;
+        font-size: 13px;
+        text-decoration: underline;
+        padding: 0;
+      }
+
+      .progresshead {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .progresshead .steplabel {
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 600;
+        font-size: 16px;
+        color: var(--forest);
+      }
+
+      .progresshead .remaining {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11.5px;
+        opacity: 0.6;
+      }
+
+      .progress-track {
+        height: 5px;
+        background: var(--mist);
+        border-radius: 100px;
+        overflow: hidden;
+        margin-bottom: 8px;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--signal);
+        border-radius: 100px;
+        transition: width 0.4s ease;
+        width: 20%;
+      }
+
+      .stepdots {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 30px;
+      }
+
+      .stepdots span {
+        height: 4px;
+        flex: 1;
+        border-radius: 100px;
+        background: var(--mist);
+      }
+
+      .stepdots span.done {
+        background: var(--signal);
+      }
+      .stepdots span.current {
+        background: var(--forest);
+      }
+
+      .step {
+        display: none;
+      }
+      .step.active {
+        display: block;
+        animation: stepIn 0.35s ease;
+      }
+
+      @keyframes stepIn {
+        from {
+          opacity: 0;
+          transform: translateX(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .step-intro {
+        margin-bottom: 26px;
+      }
+
+      .step-intro .eyebrow {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11.5px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--signal);
+      }
+
+      .step-intro h2 {
+        font-size: 21px;
+        margin-top: 6px;
+      }
+
+      .step-intro p {
+        font-size: 13.5px;
+        opacity: 0.65;
+        margin-top: 6px;
+      }
+
+      .field {
+        margin-bottom: 22px;
+      }
+
+      .field label {
+        display: block;
+        font-size: 13.5px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--forest);
+      }
+
+      .field .req {
+        color: var(--danger);
+        margin-left: 2px;
+      }
+
+      .field .hint {
+        display: block;
+        font-size: 12px;
+        font-weight: 400;
+        opacity: 0.6;
+        margin-top: 5px;
+      }
+
+      .field .errmsg {
+        display: none;
+        font-size: 12px;
+        color: var(--danger);
+        margin-top: 6px;
+      }
+
+      .field.invalid .errmsg {
+        display: block;
+      }
+
+      .field input[type="text"],
+      .field input[type="email"],
+      .field input[type="tel"],
+      .field input[type="number"],
+      .field select,
+      .field textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 8px;
+        border: 1px solid var(--line-strong);
+        background: #fff;
+        font-family: inherit;
+        font-size: 14.5px;
+        color: var(--ink);
+      }
+
+      .field input:focus,
+      .field select:focus,
+      .field textarea:focus {
+        outline: none;
+        border-color: var(--signal);
+        box-shadow: 0 0 0 3px rgba(47, 158, 110, 0.15);
+      }
+
+      .field.invalid input,
+      .field.invalid select,
+      .field.invalid textarea {
+        border-color: var(--danger);
+      }
+
+      .row2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .row3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 16px;
+      }
+
+      @media (max-width: 560px) {
+        .row2,
+        .row3 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .opt-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      @media (max-width: 560px) {
+        .opt-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .opt-grid.cols3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      @media (max-width: 560px) {
+        .opt-grid.cols3 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .opt {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--line-strong);
+        border-radius: 8px;
+        padding: 12px 14px;
+        font-size: 14px;
+        cursor: pointer;
+        background: #fff;
+        transition:
+          border-color 0.15s,
+          background 0.15s;
+      }
+
+      .opt:hover {
+        border-color: var(--signal);
+      }
+      .opt input {
+        accent-color: var(--forest);
+      }
+      .opt.checked {
+        border-color: var(--signal);
+        background: rgba(47, 158, 110, 0.07);
+      }
+
+      .likert-row {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 12px;
+      }
+
+      .likert-row .lq {
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 12px;
+      }
+
+      .likert-scale {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .likert-scale .lend {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 10.5px;
+        opacity: 0.55;
+        white-space: nowrap;
+      }
+
+      .likert-opts {
+        display: flex;
+        gap: 6px;
+        flex: 1;
+        justify-content: center;
+      }
+
+      .likert-opts label {
+        position: relative;
+      }
+
+      .likert-opts input {
+        position: absolute;
+        opacity: 0;
+        inset: 0;
+        cursor: pointer;
+      }
+
+      .likert-opts span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid var(--line-strong);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
+        color: var(--forest);
+      }
+
+      .likert-opts input:checked + span {
+        background: var(--forest);
+        color: #fff;
+        border-color: var(--forest);
+      }
+
+      @media (max-width: 560px) {
+        .likert-scale {
+          flex-wrap: wrap;
+        }
+        .lend {
+          width: 100%;
+          text-align: center;
+        }
+      }
+
+      .scale5 {
+        display: flex;
+        gap: 8px;
+      }
+
+      .scale5 button {
+        flex: 1;
+        padding: 14px 0;
+        border-radius: 8px;
+        border: 1px solid var(--line-strong);
+        background: #fff;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 600;
+        font-size: 15px;
+        color: var(--forest);
+      }
+
+      .scale5 button.sel {
+        background: var(--forest);
+        color: #fff;
+        border-color: var(--forest);
+      }
+
+      .mvp-video {
+        aspect-ratio: 16/9;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #0e362f, #123f35);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 18px;
+      }
+
+      .playbtn {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.32);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .step-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid var(--line);
+      }
+
+      .step-nav .spacer {
+        flex: 1;
+      }
+
+      .conditional {
+        margin-top: 10px;
+        display: none;
+      }
+
+      .conditional.show {
+        display: block;
+      }
+
+      .thankyou {
+        display: none;
+        text-align: center;
+        padding: 10px 4px;
+      }
+
+      .thankyou.active {
+        display: block;
+      }
+
+      .thankyou .ic-big {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--mist);
+        color: var(--signal);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+      }
+
+      .thankyou h2 {
+        font-size: 23px;
+        margin-bottom: 10px;
+      }
+
+      .thankyou p {
+        opacity: 0.72;
+        font-size: 14.5px;
+        max-width: 440px;
+        margin: 0 auto;
+      }
+
+      .thankyou .tybtns {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 28px;
+      }
+
+      .sharefeedback {
+        font-size: 12px;
+        color: var(--signal);
+        margin-top: 10px;
+        height: 14px;
+      }
+
+      footer.site {
+        padding: 34px 0;
+        text-align: center;
+      }
+
+      footer.site .mono {
+        font-size: 11.5px;
+        opacity: 0.5;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.001ms !important;
+          transition-duration: 0.001ms !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="headband">
+      <div class="wrap">
+        <div class="brandline">
+          <span class="mark"></span>
+          <span>GreenView</span>
+        </div>
+
+        <h1>Pesquisa de Validação — GreenView</h1>
+
+        <p class="lead">
+          Esta pesquisa faz parte do processo de desenvolvimento do GreenView,
+          uma plataforma de monitoramento urbano baseada em Inteligência
+          Artificial. Seu objetivo é compreender os desafios enfrentados pelos
+          municípios e validar soluções que possam apoiar a gestão pública. O
+          preenchimento leva aproximadamente 5 minutos.
+        </p>
+
+        <div class="badges">
+          <span class="badge">Projeto em pré-incubação</span>
+          <span class="badge"
+            >Dados usados apenas para pesquisa e desenvolvimento</span
+          >
+          <span class="badge">LGPD · tratamento confidencial</span>
+        </div>
+
+        <div class="metabar">
+          <span><b>~5 min</b> de preenchimento</span>
+          <span>5 etapas</span>
+          <span>Progresso salvo automaticamente neste navegador</span>
+        </div>
       </div>
+    </div>
 
-      <div id="formArea">
-        <div class="progresshead">
-          <span class="steplabel mono" id="stepLabel">Etapa 1 de 5</span>
-          <span class="remaining" id="remainingLabel">faltam 4 etapas</span>
-        </div>
-        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-        <div class="stepdots" id="stepDots">
-          <span class="current"></span><span></span><span></span><span></span><span></span>
-        </div>
-
-        <form id="valForm" novalidate>
-
-          <!-- STEP 1 — PERFIL -->
-          <div class="step active" data-step="1">
-            <div class="step-intro">
-              <span class="eyebrow">Etapa 1</span>
-              <h2>Perfil do respondente</h2>
-              <p>Essas informações nos ajudam a entender o contexto do seu município.</p>
-            </div>
-
-            <div class="row2">
-              <div class="field" data-required="true">
-                <label for="nome">Nome<span class="req">*</span></label>
-                <input type="text" id="nome" name="nome" required>
-                <span class="errmsg">Informe seu nome.</span>
-              </div>
-              <div class="field" data-required="true">
-                <label for="cargo">Cargo<span class="req">*</span></label>
-                <input type="text" id="cargo" name="cargo" placeholder="Ex: Secretário de Obras" required>
-                <span class="errmsg">Informe seu cargo.</span>
-              </div>
-            </div>
-            <div class="row2">
-              <div class="field">
-                <label for="secretaria">Secretaria</label>
-                <input type="text" id="secretaria" name="secretaria" placeholder="Ex: Meio Ambiente">
-              </div>
-              <div class="field" data-required="true">
-                <label for="municipio">Município<span class="req">*</span></label>
-                <input type="text" id="municipio" name="municipio" required>
-                <span class="errmsg">Informe o município.</span>
-              </div>
-            </div>
-            <div class="row2">
-              <div class="field" data-required="true">
-                <label for="estado">Estado<span class="req">*</span></label>
-                <select id="estado" name="estado" required>
-                  <option value="">UF</option>
-                  <option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option>
-                  <option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option>
-                  <option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option>
-                  <option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
-                  <option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option>
-                  <option>SE</option><option>TO</option>
-                </select>
-                <span class="errmsg">Selecione o estado.</span>
-              </div>
-              <div class="field" data-required="true">
-                <label for="habitantes">Número aproximado de habitantes<span class="req">*</span></label>
-                <input type="number" id="habitantes" name="habitantes" min="0" placeholder="Ex: 45000" required>
-                <span class="hint" id="faixaAuto">Faixa populacional estimada aparece aqui.</span>
-                <span class="errmsg">Informe um número válido de habitantes.</span>
-              </div>
-            </div>
-            <div class="field">
-              <label for="faixa">Faixa populacional</label>
-              <select id="faixa" name="faixa">
-                <option value="">Selecione ou deixe em branco para preenchimento automático</option>
-                <option>Até 20 mil</option>
-                <option>20 mil a 100 mil</option>
-                <option>100 mil a 500 mil</option>
-                <option>Acima de 500 mil</option>
-              </select>
-            </div>
-            <div class="field">
-              <label>Seu município é:</label>
-              <div class="opt-grid cols3" data-group="porte">
-                <label class="opt"><input type="radio" name="porte" value="Pequeno"><span>Pequeno</span></label>
-                <label class="opt"><input type="radio" name="porte" value="Médio"><span>Médio</span></label>
-                <label class="opt"><input type="radio" name="porte" value="Grande"><span>Grande</span></label>
-              </div>
-            </div>
+    <div class="surveywrap">
+      <div class="wrap">
+        <div class="surveycard">
+          <div class="resume-banner" id="resumeBanner">
+            <span
+              >Encontramos respostas salvas de uma sessão anterior. Continuamos
+              de onde você parou.</span
+            >
+            <button type="button" id="btnClearSave">Limpar e recomeçar</button>
           </div>
 
-          <!-- STEP 2 — SITUAÇÃO ATUAL -->
-          <div class="step" data-step="2">
-            <div class="step-intro">
-              <span class="eyebrow">Etapa 2</span>
-              <h2>Situação atual</h2>
-              <p>Como o problema de mato alto é tratado hoje, na prática.</p>
+          <div id="formArea">
+            <div class="progresshead">
+              <span class="steplabel mono" id="stepLabel">Etapa 1 de 5</span>
+              <span class="remaining" id="remainingLabel">faltam 4 etapas</span>
             </div>
 
-            <div class="field">
-              <label>Como sua prefeitura identifica atualmente áreas com mato alto?</label>
-              <div class="opt-grid">
-                <label class="opt"><input type="checkbox" name="identificacao" value="Fiscalização presencial"><span>Fiscalização presencial</span></label>
-                <label class="opt"><input type="checkbox" name="identificacao" value="Denúncias da população"><span>Denúncias da população</span></label>
-                <label class="opt"><input type="checkbox" name="identificacao" value="Aplicativo municipal"><span>Aplicativo municipal</span></label>
-                <label class="opt"><input type="checkbox" name="identificacao" value="WhatsApp"><span>WhatsApp</span></label>
-                <label class="opt"><input type="checkbox" name="identificacao" value="Drone"><span>Drone</span></label>
-                <label class="opt"><input type="checkbox" name="identificacao" value="Outro" id="identOutroChk"><span>Outro</span></label>
-              </div>
-              <div class="conditional" id="identOutroWrap">
-                <input type="text" id="identOutroTxt" name="identificacaoOutro" placeholder="Descreva">
-              </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="progressFill"></div>
             </div>
 
-            <div class="row2">
-              <div class="field">
-                <label for="equipes">Quantas equipes realizam esse trabalho?</label>
-                <input type="number" id="equipes" name="equipes" min="0" placeholder="Ex: 3">
-              </div>
-              <div class="field">
-                <label for="frequenciaInsp">Com que frequência essas inspeções ocorrem?</label>
-                <select id="frequenciaInsp" name="frequenciaInsp">
-                  <option value="">Selecione</option>
-                  <option>Diariamente</option>
-                  <option>Semanalmente</option>
-                  <option>Quinzenalmente</option>
-                  <option>Mensalmente</option>
-                  <option>Apenas quando há denúncia</option>
-                </select>
-              </div>
+            <div class="stepdots" id="stepDots">
+              <span class="current"></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
             </div>
 
-            <div class="field">
-              <label>Em média, quanto tempo leva entre identificar um problema e iniciar a ação?</label>
-              <div class="opt-grid">
-                <label class="opt"><input type="radio" name="tempoAcao" value="Menos de 3 dias"><span>Menos de 3 dias</span></label>
-                <label class="opt"><input type="radio" name="tempoAcao" value="Até 1 semana"><span>Até 1 semana</span></label>
-                <label class="opt"><input type="radio" name="tempoAcao" value="Até 15 dias"><span>Até 15 dias</span></label>
-                <label class="opt"><input type="radio" name="tempoAcao" value="Até 30 dias"><span>Até 30 dias</span></label>
-                <label class="opt"><input type="radio" name="tempoAcao" value="Mais de 30 dias"><span>Mais de 30 dias</span></label>
+            <form id="valForm" novalidate>
+              <!-- STEP 1 -->
+              <div class="step active" data-step="1">
+                <div class="step-intro">
+                  <span class="eyebrow">Etapa 1</span>
+                  <h2>Perfil do respondente</h2>
+                  <p>
+                    Essas informações nos ajudam a entender o contexto do seu
+                    município.
+                  </p>
+                </div>
+
+                <div class="row2">
+                  <div class="field" data-required="true">
+                    <label>Nome<span class="req">*</span></label>
+                    <input type="text" name="nome" required />
+                    <span class="errmsg">Informe seu nome.</span>
+                  </div>
+
+                  <div class="field" data-required="true">
+                    <label>Cargo<span class="req">*</span></label>
+                    <input type="text" name="cargo" required />
+                    <span class="errmsg">Informe seu cargo.</span>
+                  </div>
+                </div>
+
+                <div class="row2">
+                  <div class="field">
+                    <label>Secretaria</label>
+                    <input type="text" name="secretaria" />
+                  </div>
+
+                  <div class="field" data-required="true">
+                    <label>Município<span class="req">*</span></label>
+                    <input type="text" name="municipio" required />
+                    <span class="errmsg">Informe o município.</span>
+                  </div>
+                </div>
+
+                <div class="row2">
+                  <div class="field" data-required="true">
+                    <label>Estado<span class="req">*</span></label>
+
+                    <select name="estado" required>
+                      <option value="">UF</option>
+                      <option>AC</option>
+                      <option>AL</option>
+                      <option>AP</option>
+                      <option>AM</option>
+                      <option>BA</option>
+                      <option>CE</option>
+                      <option>DF</option>
+                      <option>ES</option>
+                      <option>GO</option>
+                      <option>MA</option>
+                      <option>MT</option>
+                      <option>MS</option>
+                      <option>MG</option>
+                      <option>PA</option>
+                      <option>PB</option>
+                      <option>PR</option>
+                      <option>PE</option>
+                      <option>PI</option>
+                      <option>RJ</option>
+                      <option>RN</option>
+                      <option>RS</option>
+                      <option>RO</option>
+                      <option>RR</option>
+                      <option>SC</option>
+                      <option>SP</option>
+                      <option>SE</option>
+                      <option>TO</option>
+                    </select>
+
+                    <span class="errmsg">Selecione o estado.</span>
+                  </div>
+
+                  <div class="field" data-required="true">
+                    <label
+                      >Número aproximado de habitantes<span class="req"
+                        >*</span
+                      ></label
+                    >
+
+                    <input
+                      type="number"
+                      id="habitantes"
+                      name="habitantes"
+                      min="0"
+                      required
+                    />
+
+                    <span class="hint" id="faixaAuto">
+                      Faixa populacional estimada aparece aqui.
+                    </span>
+
+                    <span class="errmsg">Informe um número válido.</span>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>Faixa populacional</label>
+
+                  <select id="faixa" name="faixa">
+                    <option value="">
+                      Selecione ou deixe em branco para preenchimento automático
+                    </option>
+                    <option>Até 20 mil</option>
+                    <option>20 mil a 100 mil</option>
+                    <option>100 mil a 500 mil</option>
+                    <option>Acima de 500 mil</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label>Seu município é:</label>
+
+                  <div class="opt-grid cols3">
+                    <label class="opt"
+                      ><input type="radio" name="porte" value="Pequeno" /><span
+                        >Pequeno</span
+                      ></label
+                    >
+                    <label class="opt"
+                      ><input type="radio" name="porte" value="Médio" /><span
+                        >Médio</span
+                      ></label
+                    >
+                    <label class="opt"
+                      ><input type="radio" name="porte" value="Grande" /><span
+                        >Grande</span
+                      ></label
+                    >
+                  </div>
+                </div>
               </div>
-            </div>
+
+              <!-- STEP 2 -->
+
+              <div class="step" data-step="2">
+                <div class="step-intro">
+                  <span class="eyebrow">Etapa 2</span>
+                  <h2>Situação atual</h2>
+                  <p>Como o problema de mato alto é tratado hoje.</p>
+                </div>
+
+                <div class="field">
+                  <label
+                    >Como sua prefeitura identifica atualmente áreas com mato
+                    alto?</label
+                  >
+
+                  <div class="opt-grid">
+                    <label class="opt"
+                      ><input
+                        type="checkbox"
+                        name="identificacao"
+                        value="Fiscalização presencial"
+                      /><span>Fiscalização presencial</span></label
+                    >
+
+                    <label class="opt"
+                      ><input
+                        type="checkbox"
+                        name="identificacao"
+                        value="Denúncias da população"
+                      /><span>Denúncias da população</span></label
+                    >
+
+                    <label class="opt"
+                      ><input
+                        type="checkbox"
+                        name="identificacao"
+                        value="Aplicativo municipal"
+                      /><span>Aplicativo municipal</span></label
+                    >
+
+                    <label class="opt"
+                      ><input
+                        type="checkbox"
+                        name="identificacao"
+                        value="WhatsApp"
+                      /><span>WhatsApp</span></label
+                    >
+
+                    <label class="opt"
+                      ><input
+                        type="checkbox"
+                        name="identificacao"
+                        value="Drone"
+                      /><span>Drone</span></label
+                    >
+
+                    <label class="opt"
+                      ><input
+                        type="checkbox"
+                        name="identificacao"
+                        value="Outro"
+                        id="identOutroChk"
+                      /><span>Outro</span></label
+                    >
+                  </div>
+
+                  <div class="conditional" id="identOutroWrap">
+                    <input
+                      type="text"
+                      name="identificacaoOutro"
+                      placeholder="Descreva"
+                    />
+                  </div>
+                </div>
+
+                <div class="row2">
+                  <div class="field">
+                    <label>Quantas equipes realizam esse trabalho?</label>
+                    <input type="number" name="equipes" min="0" />
+                  </div>
+
+                  <div class="field">
+                    <label>Com que frequência essas inspeções ocorrem?</label>
+
+                    <select name="frequenciaInsp">
+                      <option value="">Selecione</option>
+                      <option>Diariamente</option>
+                      <option>Semanalmente</option>
+                      <option>Quinzenalmente</option>
+                      <option>Mensalmente</option>
+                      <option>Apenas quando há denúncia</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label
+                    >Em média, quanto tempo leva entre identificar um problema e
+                    iniciar a ação?</label
+                  >
+
+                  <div class="opt-grid">
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="tempoAcao"
+                        value="Menos de 3 dias"
+                      /><span>Menos de 3 dias</span></label
+                    >
+
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="tempoAcao"
+                        value="Até 1 semana"
+                      /><span>Até 1 semana</span></label
+                    >
+
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="tempoAcao"
+                        value="Até 15 dias"
+                      /><span>Até 15 dias</span></label
+                    >
+
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="tempoAcao"
+                        value="Até 30 dias"
+                      /><span>Até 30 dias</span></label
+                    >
+
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="tempoAcao"
+                        value="Mais de 30 dias"
+                      /><span>Mais de 30 dias</span></label
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- STEP 3 -->
+
+              <div class="step" data-step="3">
+                <div class="step-intro">
+                  <span class="eyebrow">Etapa 3</span>
+                  <h2>Dores e desafios</h2>
+                  <p>Avalie cada desafio.</p>
+                </div>
+
+                <div id="likertGroup">
+                  <div class="likert-row">
+                    <div class="lq">Falta de equipe</div>
+                    <div class="likert-scale">
+                      <span class="lend">Nada</span>
+                      <div class="likert-opts">
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_falta_equipe"
+                            value="1"
+                          /><span>1</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_falta_equipe"
+                            value="2"
+                          /><span>2</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_falta_equipe"
+                            value="3"
+                          /><span>3</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_falta_equipe"
+                            value="4"
+                          /><span>4</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_falta_equipe"
+                            value="5"
+                          /><span>5</span></label
+                        >
+                      </div>
+                      <span class="lend">Muito</span>
+                    </div>
+                  </div>
+
+                  <div class="likert-row">
+                    <div class="lq">Alto custo das inspeções</div>
+                    <div class="likert-scale">
+                      <span class="lend">Nada</span>
+                      <div class="likert-opts">
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_custo_inspecao"
+                            value="1"
+                          /><span>1</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_custo_inspecao"
+                            value="2"
+                          /><span>2</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_custo_inspecao"
+                            value="3"
+                          /><span>3</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_custo_inspecao"
+                            value="4"
+                          /><span>4</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_custo_inspecao"
+                            value="5"
+                          /><span>5</span></label
+                        >
+                      </div>
+                      <span class="lend">Muito</span>
+                    </div>
+                  </div>
+
+                  <div class="likert-row">
+                    <div class="lq">
+                      Dificuldade em localizar todos os pontos
+                    </div>
+                    <div class="likert-scale">
+                      <span class="lend">Nada</span>
+                      <div class="likert-opts">
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_localizar_pontos"
+                            value="1"
+                          /><span>1</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_localizar_pontos"
+                            value="2"
+                          /><span>2</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_localizar_pontos"
+                            value="3"
+                          /><span>3</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_localizar_pontos"
+                            value="4"
+                          /><span>4</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_localizar_pontos"
+                            value="5"
+                          /><span>5</span></label
+                        >
+                      </div>
+                      <span class="lend">Muito</span>
+                    </div>
+                  </div>
+
+                  <div class="likert-row">
+                    <div class="lq">Reclamações frequentes da população</div>
+                    <div class="likert-scale">
+                      <span class="lend">Nada</span>
+                      <div class="likert-opts">
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_reclamacoes"
+                            value="1"
+                          /><span>1</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_reclamacoes"
+                            value="2"
+                          /><span>2</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_reclamacoes"
+                            value="3"
+                          /><span>3</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_reclamacoes"
+                            value="4"
+                          /><span>4</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_reclamacoes"
+                            value="5"
+                          /><span>5</span></label
+                        >
+                      </div>
+                      <span class="lend">Muito</span>
+                    </div>
+                  </div>
+
+                  <div class="likert-row">
+                    <div class="lq">Falta de informações atualizadas</div>
+                    <div class="likert-scale">
+                      <span class="lend">Nada</span>
+                      <div class="likert-opts">
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_info_atualizada"
+                            value="1"
+                          /><span>1</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_info_atualizada"
+                            value="2"
+                          /><span>2</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_info_atualizada"
+                            value="3"
+                          /><span>3</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_info_atualizada"
+                            value="4"
+                          /><span>4</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_info_atualizada"
+                            value="5"
+                          /><span>5</span></label
+                        >
+                      </div>
+                      <span class="lend">Muito</span>
+                    </div>
+                  </div>
+
+                  <div class="likert-row">
+                    <div class="lq">Dificuldade em priorizar atendimentos</div>
+                    <div class="likert-scale">
+                      <span class="lend">Nada</span>
+                      <div class="likert-opts">
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_priorizar"
+                            value="1"
+                          /><span>1</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_priorizar"
+                            value="2"
+                          /><span>2</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_priorizar"
+                            value="3"
+                          /><span>3</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_priorizar"
+                            value="4"
+                          /><span>4</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_priorizar"
+                            value="5"
+                          /><span>5</span></label
+                        >
+                      </div>
+                      <span class="lend">Muito</span>
+                    </div>
+                  </div>
+
+                  <div class="likert-row">
+                    <div class="lq">Tempo entre identificação e execução</div>
+                    <div class="likert-scale">
+                      <span class="lend">Nada</span>
+                      <div class="likert-opts">
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_tempo_execucao"
+                            value="1"
+                          /><span>1</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_tempo_execucao"
+                            value="2"
+                          /><span>2</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_tempo_execucao"
+                            value="3"
+                          /><span>3</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_tempo_execucao"
+                            value="4"
+                          /><span>4</span></label
+                        >
+                        <label
+                          ><input
+                            type="radio"
+                            name="likert_tempo_execucao"
+                            value="5"
+                          /><span>5</span></label
+                        >
+                      </div>
+                      <span class="lend">Muito</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label
+                    >Qual é hoje o maior desafio relacionado ao monitoramento
+                    urbano?</label
+                  >
+                  <textarea name="maiorDesafio" rows="3"></textarea>
+                </div>
+              </div>
+
+              <!-- STEP 4 -->
+
+              <div class="step" data-step="4">
+                <div class="step-intro">
+                  <span class="eyebrow">Etapa 4</span>
+                  <h2>Conheça o MVP</h2>
+                  <p>
+                    O GreenView utiliza IA para identificar áreas com mato alto.
+                  </p>
+                </div>
+
+                <div class="mvp-video">
+                  <button type="button" class="playbtn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <path d="M7 5.5V18.5L19 12L7 5.5Z" fill="#fff" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="field">
+                  <label
+                    >Depois de assistir: quanto essa solução parece útil?</label
+                  >
+
+                  <div class="scale5" id="scaleUtil">
+                    <button type="button" data-val="1">1</button>
+                    <button type="button" data-val="2">2</button>
+                    <button type="button" data-val="3">3</button>
+                    <button type="button" data-val="4">4</button>
+                    <button type="button" data-val="5">5</button>
+                  </div>
+
+                  <span class="hint"
+                    >1 = nada útil · 5 = extremamente útil</span
+                  >
+                </div>
+
+                <div class="row2">
+                  <div class="field">
+                    <label>Reduziria o tempo de fiscalização?</label>
+
+                    <div
+                      class="opt-grid cols3"
+                      style="grid-template-columns: repeat(3, 1fr)"
+                    >
+                      <label class="opt"
+                        ><input
+                          type="radio"
+                          name="reduzTempo"
+                          value="Sim"
+                        /><span>Sim</span></label
+                      >
+                      <label class="opt"
+                        ><input
+                          type="radio"
+                          name="reduzTempo"
+                          value="Parcialmente"
+                        /><span>Parcial.</span></label
+                      >
+                      <label class="opt"
+                        ><input
+                          type="radio"
+                          name="reduzTempo"
+                          value="Não"
+                        /><span>Não</span></label
+                      >
+                    </div>
+                  </div>
+
+                  <div class="field">
+                    <label>Reduziria custos?</label>
+
+                    <div
+                      class="opt-grid cols3"
+                      style="grid-template-columns: repeat(3, 1fr)"
+                    >
+                      <label class="opt"
+                        ><input
+                          type="radio"
+                          name="reduzCusto"
+                          value="Sim"
+                        /><span>Sim</span></label
+                      >
+                      <label class="opt"
+                        ><input
+                          type="radio"
+                          name="reduzCusto"
+                          value="Parcialmente"
+                        /><span>Parcial.</span></label
+                      >
+                      <label class="opt"
+                        ><input
+                          type="radio"
+                          name="reduzCusto"
+                          value="Não"
+                        /><span>Não</span></label
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>Quais módulos seriam mais interessantes?</label>
+
+                  <div class="opt-grid">
+                    <label class="opt"
+                      ><input
+                        type="checkbox"
+                        name="modulos"
+                        value="Mato Alto"
+                      /><span>Mato alto</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="checkbox"
+                        name="modulos"
+                        value="Buracos"
+                      /><span>Buracos</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="checkbox"
+                        name="modulos"
+                        value="Pavimentação"
+                      /><span>Pavimentação</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="checkbox"
+                        name="modulos"
+                        value="Qualidade do Ar"
+                      /><span>Qualidade do ar</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="checkbox"
+                        name="modulos"
+                        value="Descarte Irregular"
+                      /><span>Descarte irregular</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="checkbox"
+                        name="modulos"
+                        value="Iluminação Pública"
+                      /><span>Iluminação pública</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="checkbox"
+                        name="modulos"
+                        value="Árvores em risco"
+                      /><span>Árvores em risco</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="checkbox"
+                        name="modulos"
+                        value="Limpeza Urbana"
+                      /><span>Limpeza urbana</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="checkbox"
+                        name="modulos"
+                        value="Outros"
+                        id="moduloOutroChk"
+                      /><span>Outros</span></label
+                    >
+                  </div>
+
+                  <div class="conditional" id="moduloOutroWrap">
+                    <input
+                      type="text"
+                      name="modulosOutro"
+                      placeholder="Descreva"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- STEP 5 -->
+
+              <div class="step" data-step="5">
+                <div class="step-intro">
+                  <span class="eyebrow">Etapa 5</span>
+                  <h2>Interesse e próximos passos</h2>
+                  <p>Últimas perguntas.</p>
+                </div>
+
+                <div class="field">
+                  <label
+                    >Sua prefeitura possui interesse em conhecer uma
+                    demonstração?</label
+                  >
+
+                  <div
+                    class="opt-grid cols3"
+                    style="grid-template-columns: repeat(3, 1fr)"
+                  >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="interesseDemo"
+                        value="Sim"
+                      /><span>Sim</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="interesseDemo"
+                        value="Talvez"
+                      /><span>Talvez</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="interesseDemo"
+                        value="Não"
+                      /><span>Não</span></label
+                    >
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label
+                    >Sua prefeitura participaria de um projeto piloto?</label
+                  >
+
+                  <div
+                    class="opt-grid cols3"
+                    style="grid-template-columns: repeat(3, 1fr)"
+                  >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="interessePiloto"
+                        value="Sim"
+                      /><span>Sim</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="interessePiloto"
+                        value="Talvez"
+                      /><span>Talvez</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="interessePiloto"
+                        value="Não"
+                      /><span>Não</span></label
+                    >
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label
+                    >Quem normalmente participa da decisão de
+                    contratação?</label
+                  >
+                  <textarea name="decisor" rows="2"></textarea>
+                </div>
+
+                <div class="field">
+                  <label>Existe previsão de investimentos?</label>
+
+                  <div
+                    class="opt-grid cols3"
+                    style="grid-template-columns: repeat(3, 1fr)"
+                  >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="previsaoInvestimento"
+                        value="Sim"
+                      /><span>Sim</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="previsaoInvestimento"
+                        value="Não"
+                      /><span>Não</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="previsaoInvestimento"
+                        value="Não sei informar"
+                      /><span>Não sei</span></label
+                    >
+                  </div>
+                </div>
+
+                <div
+                  class="field"
+                  style="
+                    margin-top: 26px;
+                    padding-top: 22px;
+                    border-top: 1px solid var(--line);
+                  "
+                >
+                  <label
+                    >Caso deseje receber novidades sobre o GreenView:</label
+                  >
+
+                  <div class="row3">
+                    <input type="text" name="contatoNome" placeholder="Nome" />
+
+                    <input
+                      type="email"
+                      id="contatoEmail"
+                      name="contatoEmail"
+                      placeholder="E-mail institucional"
+                    />
+
+                    <input
+                      type="tel"
+                      name="contatoTelefone"
+                      placeholder="Telefone"
+                    />
+                  </div>
+
+                  <span class="errmsg" id="emailErr"
+                    >Informe um e-mail válido.</span
+                  >
+                </div>
+              </div>
+
+              <div class="step-nav">
+                <button
+                  type="button"
+                  class="btn btn-ghost"
+                  id="btnBack"
+                  style="visibility: hidden"
+                >
+                  Voltar
+                </button>
+
+                <span class="spacer"></span>
+
+                <button type="button" class="btn btn-primary" id="btnNext">
+                  Próximo
+                </button>
+
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  id="btnSubmit"
+                  style="display: none"
+                >
+                  Enviar respostas
+                </button>
+              </div>
+            </form>
           </div>
 
-          <!-- STEP 3 — DORES -->
-          <div class="step" data-step="3">
-            <div class="step-intro">
-              <span class="eyebrow">Etapa 3</span>
-              <h2>Dores e desafios</h2>
-              <p>Avalie o quanto cada item representa um desafio para sua prefeitura hoje.</p>
+          <div class="thankyou" id="thankyou">
+            <div class="ic-big">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M5 13L9.5 17.5L19 7"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+              </svg>
             </div>
 
-            <div id="likertGroup">
-              <div class="likert-row" data-likert="falta_equipe">
-                <div class="lq">Falta de equipe</div>
-                <div class="likert-scale">
-                  <span class="lend">Nada desafiador</span>
-                  <div class="likert-opts">
-                    <label><input type="radio" name="likert_falta_equipe" value="1"><span>1</span></label>
-                    <label><input type="radio" name="likert_falta_equipe" value="2"><span>2</span></label>
-                    <label><input type="radio" name="likert_falta_equipe" value="3"><span>3</span></label>
-                    <label><input type="radio" name="likert_falta_equipe" value="4"><span>4</span></label>
-                    <label><input type="radio" name="likert_falta_equipe" value="5"><span>5</span></label>
-                  </div>
-                  <span class="lend">Extremamente desafiador</span>
-                </div>
-              </div>
-              <div class="likert-row" data-likert="custo_inspecao">
-                <div class="lq">Alto custo das inspeções</div>
-                <div class="likert-scale">
-                  <span class="lend">Nada desafiador</span>
-                  <div class="likert-opts">
-                    <label><input type="radio" name="likert_custo_inspecao" value="1"><span>1</span></label>
-                    <label><input type="radio" name="likert_custo_inspecao" value="2"><span>2</span></label>
-                    <label><input type="radio" name="likert_custo_inspecao" value="3"><span>3</span></label>
-                    <label><input type="radio" name="likert_custo_inspecao" value="4"><span>4</span></label>
-                    <label><input type="radio" name="likert_custo_inspecao" value="5"><span>5</span></label>
-                  </div>
-                  <span class="lend">Extremamente desafiador</span>
-                </div>
-              </div>
-              <div class="likert-row" data-likert="localizar_pontos">
-                <div class="lq">Dificuldade em localizar todos os pontos</div>
-                <div class="likert-scale">
-                  <span class="lend">Nada desafiador</span>
-                  <div class="likert-opts">
-                    <label><input type="radio" name="likert_localizar_pontos" value="1"><span>1</span></label>
-                    <label><input type="radio" name="likert_localizar_pontos" value="2"><span>2</span></label>
-                    <label><input type="radio" name="likert_localizar_pontos" value="3"><span>3</span></label>
-                    <label><input type="radio" name="likert_localizar_pontos" value="4"><span>4</span></label>
-                    <label><input type="radio" name="likert_localizar_pontos" value="5"><span>5</span></label>
-                  </div>
-                  <span class="lend">Extremamente desafiador</span>
-                </div>
-              </div>
-              <div class="likert-row" data-likert="reclamacoes">
-                <div class="lq">Reclamações frequentes da população</div>
-                <div class="likert-scale">
-                  <span class="lend">Nada desafiador</span>
-                  <div class="likert-opts">
-                    <label><input type="radio" name="likert_reclamacoes" value="1"><span>1</span></label>
-                    <label><input type="radio" name="likert_reclamacoes" value="2"><span>2</span></label>
-                    <label><input type="radio" name="likert_reclamacoes" value="3"><span>3</span></label>
-                    <label><input type="radio" name="likert_reclamacoes" value="4"><span>4</span></label>
-                    <label><input type="radio" name="likert_reclamacoes" value="5"><span>5</span></label>
-                  </div>
-                  <span class="lend">Extremamente desafiador</span>
-                </div>
-              </div>
-              <div class="likert-row" data-likert="info_atualizada">
-                <div class="lq">Falta de informações atualizadas</div>
-                <div class="likert-scale">
-                  <span class="lend">Nada desafiador</span>
-                  <div class="likert-opts">
-                    <label><input type="radio" name="likert_info_atualizada" value="1"><span>1</span></label>
-                    <label><input type="radio" name="likert_info_atualizada" value="2"><span>2</span></label>
-                    <label><input type="radio" name="likert_info_atualizada" value="3"><span>3</span></label>
-                    <label><input type="radio" name="likert_info_atualizada" value="4"><span>4</span></label>
-                    <label><input type="radio" name="likert_info_atualizada" value="5"><span>5</span></label>
-                  </div>
-                  <span class="lend">Extremamente desafiador</span>
-                </div>
-              </div>
-              <div class="likert-row" data-likert="priorizar">
-                <div class="lq">Dificuldade em priorizar atendimentos</div>
-                <div class="likert-scale">
-                  <span class="lend">Nada desafiador</span>
-                  <div class="likert-opts">
-                    <label><input type="radio" name="likert_priorizar" value="1"><span>1</span></label>
-                    <label><input type="radio" name="likert_priorizar" value="2"><span>2</span></label>
-                    <label><input type="radio" name="likert_priorizar" value="3"><span>3</span></label>
-                    <label><input type="radio" name="likert_priorizar" value="4"><span>4</span></label>
-                    <label><input type="radio" name="likert_priorizar" value="5"><span>5</span></label>
-                  </div>
-                  <span class="lend">Extremamente desafiador</span>
-                </div>
-              </div>
-              <div class="likert-row" data-likert="tempo_execucao">
-                <div class="lq">Tempo entre identificação e execução</div>
-                <div class="likert-scale">
-                  <span class="lend">Nada desafiador</span>
-                  <div class="likert-opts">
-                    <label><input type="radio" name="likert_tempo_execucao" value="1"><span>1</span></label>
-                    <label><input type="radio" name="likert_tempo_execucao" value="2"><span>2</span></label>
-                    <label><input type="radio" name="likert_tempo_execucao" value="3"><span>3</span></label>
-                    <label><input type="radio" name="likert_tempo_execucao" value="4"><span>4</span></label>
-                    <label><input type="radio" name="likert_tempo_execucao" value="5"><span>5</span></label>
-                  </div>
-                  <span class="lend">Extremamente desafiador</span>
-                </div>
-              </div>
-            </div>
+            <h2>Muito obrigado por contribuir com a evolução do GreenView.</h2>
 
-            <div class="field" style="margin-top:8px;">
-              <label for="maiorDesafio">Qual é hoje o maior desafio relacionado ao monitoramento urbano?</label>
-              <textarea id="maiorDesafio" name="maiorDesafio" rows="3" placeholder="Resposta aberta"></textarea>
-            </div>
-          </div>
+            <p>
+              Suas respostas foram registradas e vão orientar diretamente as
+              próximas etapas do produto.
+            </p>
 
-          <!-- STEP 4 — MVP -->
-          <div class="step" data-step="4">
-            <div class="step-intro">
-              <span class="eyebrow">Etapa 4</span>
-              <h2>Conheça o MVP</h2>
-              <p>O GreenView utiliza Inteligência Artificial para identificar automaticamente áreas com mato alto durante o deslocamento de veículos que já circulam pela cidade.</p>
-            </div>
-
-            <div class="mvp-video">
-              <button type="button" class="playbtn" aria-label="Reproduzir demonstração do MVP">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M7 5.5V18.5L19 12L7 5.5Z" fill="#fff"/></svg>
+            <div class="tybtns">
+              <a href="index.html" class="btn btn-ghost">Voltar ao site</a>
+              <button type="button" class="btn btn-ghost" id="btnShare">
+                Compartilhar pesquisa
               </button>
             </div>
-            <p class="mono" style="font-size:11px;opacity:.5;margin-bottom:24px;">Espaço reservado para vídeo/GIF de demonstração.</p>
 
-            <div class="field">
-              <label>Depois de assistir: quanto essa solução parece útil para sua prefeitura?</label>
-              <div class="scale5" id="scaleUtil">
-                <button type="button" data-val="1">1</button>
-                <button type="button" data-val="2">2</button>
-                <button type="button" data-val="3">3</button>
-                <button type="button" data-val="4">4</button>
-                <button type="button" data-val="5">5</button>
-              </div>
-              <span class="hint">1 = nada útil · 5 = extremamente útil</span>
-            </div>
-
-            <div class="row2">
-              <div class="field">
-                <label>Reduziria o tempo de fiscalização?</label>
-                <div class="opt-grid cols3" style="grid-template-columns:repeat(3,1fr);">
-                  <label class="opt"><input type="radio" name="reduzTempo" value="Sim"><span>Sim</span></label>
-                  <label class="opt"><input type="radio" name="reduzTempo" value="Parcialmente"><span>Parcial.</span></label>
-                  <label class="opt"><input type="radio" name="reduzTempo" value="Não"><span>Não</span></label>
-                </div>
-              </div>
-              <div class="field">
-                <label>Reduziria custos?</label>
-                <div class="opt-grid cols3" style="grid-template-columns:repeat(3,1fr);">
-                  <label class="opt"><input type="radio" name="reduzCusto" value="Sim"><span>Sim</span></label>
-                  <label class="opt"><input type="radio" name="reduzCusto" value="Parcialmente"><span>Parcial.</span></label>
-                  <label class="opt"><input type="radio" name="reduzCusto" value="Não"><span>Não</span></label>
-                </div>
-              </div>
-            </div>
-
-            <div class="field">
-              <label>Quais módulos seriam mais interessantes?</label>
-              <div class="opt-grid">
-                <label class="opt"><input type="checkbox" name="modulos" value="Mato Alto"><span>Mato alto</span></label>
-                <label class="opt"><input type="checkbox" name="modulos" value="Buracos"><span>Buracos</span></label>
-                <label class="opt"><input type="checkbox" name="modulos" value="Pavimentação"><span>Pavimentação</span></label>
-                <label class="opt"><input type="checkbox" name="modulos" value="Qualidade do Ar"><span>Qualidade do ar</span></label>
-                <label class="opt"><input type="checkbox" name="modulos" value="Descarte Irregular"><span>Descarte irregular</span></label>
-                <label class="opt"><input type="checkbox" name="modulos" value="Iluminação Pública"><span>Iluminação pública</span></label>
-                <label class="opt"><input type="checkbox" name="modulos" value="Árvores em risco"><span>Árvores em risco</span></label>
-                <label class="opt"><input type="checkbox" name="modulos" value="Limpeza Urbana"><span>Limpeza urbana</span></label>
-                <label class="opt"><input type="checkbox" name="modulos" value="Outros" id="moduloOutroChk"><span>Outros</span></label>
-              </div>
-              <div class="conditional" id="moduloOutroWrap">
-                <input type="text" id="moduloOutroTxt" name="modulosOutro" placeholder="Descreva">
-              </div>
-            </div>
+            <div class="sharefeedback" id="shareFeedback"></div>
           </div>
-
-          <!-- STEP 5 — INTERESSE -->
-          <div class="step" data-step="5">
-            <div class="step-intro">
-              <span class="eyebrow">Etapa 5</span>
-              <h2>Interesse e próximos passos</h2>
-              <p>Últimas perguntas — quase lá.</p>
-            </div>
-
-            <div class="field">
-              <label>Sua prefeitura possui interesse em conhecer uma demonstração?</label>
-              <div class="opt-grid cols3" style="grid-template-columns:repeat(3,1fr);">
-                <label class="opt"><input type="radio" name="interesseDemo" value="Sim"><span>Sim</span></label>
-                <label class="opt"><input type="radio" name="interesseDemo" value="Talvez"><span>Talvez</span></label>
-                <label class="opt"><input type="radio" name="interesseDemo" value="Não"><span>Não</span></label>
-              </div>
-            </div>
-
-            <div class="field">
-              <label>Sua prefeitura participaria de um projeto piloto?</label>
-              <div class="opt-grid cols3" style="grid-template-columns:repeat(3,1fr);">
-                <label class="opt"><input type="radio" name="interessePiloto" value="Sim"><span>Sim</span></label>
-                <label class="opt"><input type="radio" name="interessePiloto" value="Talvez"><span>Talvez</span></label>
-                <label class="opt"><input type="radio" name="interessePiloto" value="Não"><span>Não</span></label>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="decisor">Quem normalmente participa da decisão de contratação de soluções tecnológicas?</label>
-              <textarea id="decisor" name="decisor" rows="2" placeholder="Resposta aberta"></textarea>
-            </div>
-
-            <div class="field">
-              <label>Existe previsão de investimentos em inovação ou cidades inteligentes?</label>
-              <div class="opt-grid cols3" style="grid-template-columns:repeat(3,1fr);">
-                <label class="opt"><input type="radio" name="previsaoInvestimento" value="Sim"><span>Sim</span></label>
-                <label class="opt"><input type="radio" name="previsaoInvestimento" value="Não"><span>Não</span></label>
-                <label class="opt"><input type="radio" name="previsaoInvestimento" value="Não sei informar"><span>Não sei</span></label>
-              </div>
-            </div>
-
-            <div class="field" style="margin-top:26px;padding-top:22px;border-top:1px solid var(--line);">
-              <label>Caso deseje receber novidades sobre o GreenView, informe:</label>
-              <span class="hint" style="margin-bottom:14px;display:block;">Opcional.</span>
-              <div class="row3">
-                <input type="text" name="contatoNome" placeholder="Nome">
-                <input type="email" id="contatoEmail" name="contatoEmail" placeholder="E-mail institucional">
-                <input type="tel" name="contatoTelefone" placeholder="Telefone">
-              </div>
-              <span class="errmsg" id="emailErr">Informe um e-mail válido.</span>
-            </div>
-          </div>
-
-          <div class="step-nav">
-            <button type="button" class="btn btn-ghost" id="btnBack" style="visibility:hidden;">Voltar</button>
-            <span class="spacer"></span>
-            <button type="button" class="btn btn-primary" id="btnNext">Próximo</button>
-            <button type="submit" class="btn btn-primary" id="btnSubmit" style="display:none;">Enviar respostas</button>
-          </div>
-        </form>
-      </div>
-
-      <div class="thankyou" id="thankyou">
-        <div class="ic-big">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 13L9.5 17.5L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <h2>Muito obrigado por contribuir com a evolução do GreenView.</h2>
-        <p>Suas respostas foram registradas e vão orientar diretamente as próximas etapas do produto — incluindo o roadmap de módulos e a seleção de municípios para o projeto piloto.</p>
-        <div class="tybtns">
-          <a href="index.html" class="btn btn-ghost">Voltar ao site</a>
-          <a href="mailto:contato@greenview.example?subject=Agendar%20demonstra%C3%A7%C3%A3o%20GreenView" class="btn btn-primary">Agendar demonstração</a>
-          <button type="button" class="btn btn-ghost" id="btnShare">Compartilhar pesquisa</button>
-        </div>
-        <div class="sharefeedback" id="shareFeedback"></div>
       </div>
-
     </div>
-  </div>
-</div>
 
-<footer class="site">
-  <span class="mono">GreenView · Projeto em pré-incubação · Pesquisa de validação de mercado</span>
-</footer>
+    <footer class="site">
+      <span class="mono"
+        >GreenView · Projeto em pré-incubação · Pesquisa de validação de
+        mercado</span
+      >
+    </footer>
 
-<script>
-(function(){
-  var STORAGE_KEY = 'greenview_pesquisa_v1';
-  var memoryStore = null; // in-memory fallback if localStorage is unavailable in this preview context
-  var storageWorks = true;
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  function storageGet(){
-    try{
-      var raw = window.localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : null;
-    }catch(e){
-      storageWorks = false;
-      return memoryStore;
-    }
-  }
-  function storageSet(obj){
-    try{
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
-    }catch(e){
-      storageWorks = false;
-      memoryStore = obj;
-    }
-  }
-  function storageClear(){
-    try{ window.localStorage.removeItem(STORAGE_KEY); }catch(e){}
-    memoryStore = null;
-  }
+    <script>
+      (function () {
+        /* =========================================================
+   SUPABASE
+========================================================= */
 
-  var totalSteps = 5;
-  var current = 1;
-  var form = document.getElementById('valForm');
-  var steps = document.querySelectorAll('.step');
-  var stepLabel = document.getElementById('stepLabel');
-  var remainingLabel = document.getElementById('remainingLabel');
-  var progressFill = document.getElementById('progressFill');
-  var stepDots = document.querySelectorAll('#stepDots span');
-  var btnBack = document.getElementById('btnBack');
-  var btnNext = document.getElementById('btnNext');
-  var btnSubmit = document.getElementById('btnSubmit');
-  var formArea = document.getElementById('formArea');
-  var thankyou = document.getElementById('thankyou');
-  var resumeBanner = document.getElementById('resumeBanner');
-  var scaleUtilVal = null;
+        var SUPABASE_URL = "https://ghqcdpjqujylzmbfrbhu.supabase.co";
 
-  // ---------- opt / checkbox highlight ----------
-  function bindOptHighlight(input){
-    input.addEventListener('change', function(){
-      if(input.type === 'radio'){
-        document.querySelectorAll('.opt input[name="'+input.name+'"]').forEach(function(i){
-          i.closest('.opt').classList.toggle('checked', i.checked);
-        });
-      } else {
-        input.closest('.opt').classList.toggle('checked', input.checked);
-      }
-      autosave();
-    });
-  }
-  document.querySelectorAll('.opt input').forEach(bindOptHighlight);
+        var SUPABASE_KEY = "sb_publishable_Pobp5MPYMKVLVLcjrcpUYw_2LcCXbgO";
 
-  // ---------- conditional "outro" fields ----------
-  function bindConditional(checkboxId, wrapId){
-    var chk = document.getElementById(checkboxId);
-    var wrap = document.getElementById(wrapId);
-    if(!chk || !wrap) return;
-    chk.addEventListener('change', function(){ wrap.classList.toggle('show', chk.checked); });
-  }
-  bindConditional('identOutroChk','identOutroWrap');
-  bindConditional('moduloOutroChk','moduloOutroWrap');
+        var supabaseClient = window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_KEY,
+        );
 
-  // ---------- scale 1-5 (utilidade do MVP) ----------
-  document.getElementById('scaleUtil').addEventListener('click', function(e){
-    var btn = e.target.closest('button');
-    if(!btn) return;
-    scaleUtilVal = btn.dataset.val;
-    this.querySelectorAll('button').forEach(function(b){ b.classList.toggle('sel', b === btn); });
-    autosave();
-  });
+        /* =========================================================
+   STORAGE
+========================================================= */
 
-  // ---------- faixa populacional automática ----------
-  var habitantesInput = document.getElementById('habitantes');
-  var faixaSelect = document.getElementById('faixa');
-  var faixaAutoLabel = document.getElementById('faixaAuto');
-  function computeFaixa(n){
-    if(!n && n !== 0) return '';
-    if(n <= 20000) return 'Até 20 mil';
-    if(n <= 100000) return '20 mil a 100 mil';
-    if(n <= 500000) return '100 mil a 500 mil';
-    return 'Acima de 500 mil';
-  }
-  habitantesInput.addEventListener('input', function(){
-    var n = parseInt(habitantesInput.value, 10);
-    var faixa = computeFaixa(isNaN(n) ? null : n);
-    if(faixa){
-      faixaAutoLabel.textContent = 'Faixa estimada automaticamente: ' + faixa;
-      if(!faixaSelect.dataset.userSet){ faixaSelect.value = faixa; }
-    } else {
-      faixaAutoLabel.textContent = 'Faixa populacional estimada aparece aqui.';
-    }
-    validateField(habitantesInput.closest('.field'));
-    autosave();
-  });
-  faixaSelect.addEventListener('change', function(){ faixaSelect.dataset.userSet = '1'; autosave(); });
+        var STORAGE_KEY = "greenview_pesquisa_v1";
+        var memoryStore = null;
 
-  // ---------- real-time validation ----------
-  function validateField(fieldEl){
-    if(!fieldEl || fieldEl.dataset.required !== 'true') return true;
-    var input = fieldEl.querySelector('input, select, textarea');
-    var ok = true;
-    if(input){
-      if(input.type === 'number'){
-        ok = input.value !== '' && Number(input.value) >= 0;
-      } else {
-        ok = !!input.value && input.value.trim() !== '';
-      }
-    }
-    fieldEl.classList.toggle('invalid', !ok);
-    return ok;
-  }
-  document.querySelectorAll('.field[data-required="true"] input, .field[data-required="true"] select').forEach(function(input){
-    input.addEventListener('blur', function(){ validateField(input.closest('.field')); });
-    input.addEventListener('input', function(){ if(input.closest('.field').classList.contains('invalid')) validateField(input.closest('.field')); autosave(); });
-    input.addEventListener('change', function(){ autosave(); });
-  });
-
-  var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  var contatoEmail = document.getElementById('contatoEmail');
-  var emailErr = document.getElementById('emailErr');
-  contatoEmail.addEventListener('blur', function(){
-    var invalid = contatoEmail.value.trim() !== '' && !emailRe.test(contatoEmail.value.trim());
-    emailErr.style.display = invalid ? 'block' : 'none';
-  });
-
-  function validateStep(stepNum){
-    var stepEl = document.querySelector('.step[data-step="'+stepNum+'"]');
-    var ok = true;
-    stepEl.querySelectorAll('.field[data-required="true"]').forEach(function(f){
-      if(!validateField(f)) ok = false;
-    });
-    if(stepNum === 5 && contatoEmail.value.trim() !== '' && !emailRe.test(contatoEmail.value.trim())){
-      emailErr.style.display = 'block';
-      ok = false;
-    }
-    if(!ok){
-      var firstInvalid = stepEl.querySelector('.field.invalid input, .field.invalid select');
-      if(firstInvalid) firstInvalid.focus();
-    }
-    return ok;
-  }
-
-  // ---------- textareas / free text autosave ----------
-  document.querySelectorAll('textarea, input[type=text], input[type=email], input[type=tel]').forEach(function(el){
-    el.addEventListener('input', function(){ autosave(); });
-  });
-
-  // ---------- render / navigation ----------
-  function render(){
-    steps.forEach(function(s){ s.classList.toggle('active', Number(s.dataset.step) === current); });
-    stepLabel.textContent = 'Etapa ' + current + ' de ' + totalSteps;
-    var remaining = totalSteps - current;
-    remainingLabel.textContent = remaining === 0 ? 'última etapa' : ('faltam ' + remaining + ' etapa' + (remaining>1?'s':''));
-    progressFill.style.width = (current/totalSteps*100) + '%';
-    stepDots.forEach(function(dot, i){
-      dot.classList.remove('done','current');
-      if(i+1 < current) dot.classList.add('done');
-      else if(i+1 === current) dot.classList.add('current');
-    });
-    btnBack.style.visibility = current === 1 ? 'hidden' : 'visible';
-    btnNext.style.display = current === totalSteps ? 'none' : 'inline-flex';
-    btnSubmit.style.display = current === totalSteps ? 'inline-flex' : 'none';
-    autosave();
-  }
-
-  btnNext.addEventListener('click', function(){
-    if(!validateStep(current)) return;
-    if(current < totalSteps){ current++; render(); }
-    window.scrollTo({top:0, behavior:'smooth'});
-  });
-  btnBack.addEventListener('click', function(){
-    if(current > 1){ current--; render(); }
-    window.scrollTo({top:0, behavior:'smooth'});
-  });
-
-  // ---------- autosave ----------
-  function collectData(){
-    var data = {};
-    new FormData(form).forEach(function(value, key){
-      if(data[key] !== undefined){
-        if(Array.isArray(data[key])) data[key].push(value);
-        else data[key] = [data[key], value];
-      } else {
-        data[key] = value;
-      }
-    });
-    return {
-      current: current,
-      fields: data,
-      scaleUtil: scaleUtilVal,
-      savedAt: new Date().toISOString()
-    };
-  }
-  var saveTimer = null;
-  function autosave(){
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(function(){ storageSet(collectData()); }, 250);
-  }
-
-  function restore(){
-    var saved = storageGet();
-    if(!saved || !saved.fields) return;
-    Object.keys(saved.fields).forEach(function(key){
-      var vals = saved.fields[key];
-      vals = Array.isArray(vals) ? vals : [vals];
-      var inputs = form.querySelectorAll('[name="'+key+'"]');
-      inputs.forEach(function(input){
-        if(input.type === 'checkbox' || input.type === 'radio'){
-          if(vals.indexOf(input.value) !== -1){
-            input.checked = true;
-            input.dispatchEvent(new Event('change'));
+        function storageGet() {
+          try {
+            var raw = localStorage.getItem(STORAGE_KEY);
+            return raw ? JSON.parse(raw) : null;
+          } catch (e) {
+            return memoryStore;
           }
-        } else {
-          input.value = vals[0];
         }
-      });
-    });
-    if(saved.scaleUtil){
-      scaleUtilVal = saved.scaleUtil;
-      var scaleBtn = document.querySelector('#scaleUtil button[data-val="'+saved.scaleUtil+'"]');
-      if(scaleBtn) scaleBtn.classList.add('sel');
-    }
-    habitantesInput.dispatchEvent(new Event('input'));
-    current = Math.min(Math.max(saved.current || 1, 1), totalSteps);
-    resumeBanner.classList.add('show');
-    render();
-  }
 
-  document.getElementById('btnClearSave').addEventListener('click', function(){
-    storageClear();
-    form.reset();
-    document.querySelectorAll('.opt.checked').forEach(function(o){ o.classList.remove('checked'); });
-    document.querySelectorAll('#scaleUtil button.sel').forEach(function(b){ b.classList.remove('sel'); });
-    scaleUtilVal = null;
-    current = 1;
-    resumeBanner.classList.remove('show');
-    render();
-  });
+        function storageSet(obj) {
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+          } catch (e) {
+            memoryStore = obj;
+          }
+        }
 
-  // ---------- submit ----------
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    if(!validateStep(current)) return;
-    var payload = collectData();
-    // submitSurveyResponse(payload) -> integração futura (Firebase / Supabase / API REST) entra aqui.
-    console.log('GreenView — pesquisa de validação concluída:', payload);
-    storageClear();
-    formArea.style.display = 'none';
-    resumeBanner.classList.remove('show');
-    thankyou.classList.add('active');
-    window.scrollTo({top:0, behavior:'smooth'});
-  });
+        function storageClear() {
+          try {
+            localStorage.removeItem(STORAGE_KEY);
+          } catch (e) {}
+          memoryStore = null;
+        }
 
-  // ---------- share ----------
-  document.getElementById('btnShare').addEventListener('click', function(){
-    var url = window.location.href.split('#')[0];
-    var feedback = document.getElementById('shareFeedback');
-    if(navigator.share){
-      navigator.share({title:'Pesquisa de Validação — GreenView', url: url}).catch(function(){});
-    } else if(navigator.clipboard){
-      navigator.clipboard.writeText(url).then(function(){
-        feedback.textContent = 'Link copiado.';
-        setTimeout(function(){ feedback.textContent=''; }, 2500);
-      });
-    } else {
-      feedback.textContent = url;
-    }
-  });
+        /* =========================================================
+   ELEMENTOS
+========================================================= */
 
-  restore();
-  render();
-})();
-</script>
+        var totalSteps = 5;
+        var current = 1;
 
-</body>
+        var form = document.getElementById("valForm");
+        var steps = document.querySelectorAll(".step");
+
+        var stepLabel = document.getElementById("stepLabel");
+        var remainingLabel = document.getElementById("remainingLabel");
+        var progressFill = document.getElementById("progressFill");
+        var stepDots = document.querySelectorAll("#stepDots span");
+
+        var btnBack = document.getElementById("btnBack");
+        var btnNext = document.getElementById("btnNext");
+        var btnSubmit = document.getElementById("btnSubmit");
+
+        var formArea = document.getElementById("formArea");
+        var thankyou = document.getElementById("thankyou");
+        var resumeBanner = document.getElementById("resumeBanner");
+
+        var scaleUtilVal = null;
+
+        /* =========================================================
+   OPTIONS
+========================================================= */
+
+        function bindOptHighlight(input) {
+          input.addEventListener("change", function () {
+            if (input.type === "radio") {
+              document
+                .querySelectorAll('.opt input[name="' + input.name + '"]')
+                .forEach(function (i) {
+                  i.closest(".opt").classList.toggle("checked", i.checked);
+                });
+            } else {
+              input.closest(".opt").classList.toggle("checked", input.checked);
+            }
+
+            autosave();
+          });
+        }
+
+        document.querySelectorAll(".opt input").forEach(bindOptHighlight);
+
+        /* =========================================================
+   CONDITIONAL
+========================================================= */
+
+        function bindConditional(a, b) {
+          var chk = document.getElementById(a);
+          var wrap = document.getElementById(b);
+
+          if (!chk) return;
+
+          chk.addEventListener("change", function () {
+            wrap.classList.toggle("show", chk.checked);
+          });
+        }
+
+        bindConditional("identOutroChk", "identOutroWrap");
+        bindConditional("moduloOutroChk", "moduloOutroWrap");
+
+        /* =========================================================
+   SCALE
+========================================================= */
+
+        document
+          .getElementById("scaleUtil")
+          .addEventListener("click", function (e) {
+            var btn = e.target.closest("button");
+
+            if (!btn) return;
+
+            scaleUtilVal = btn.dataset.val;
+
+            this.querySelectorAll("button").forEach(function (b) {
+              b.classList.toggle("sel", b === btn);
+            });
+
+            autosave();
+          });
+
+        /* =========================================================
+   FAIXA
+========================================================= */
+
+        var habitantesInput = document.getElementById("habitantes");
+        var faixaSelect = document.getElementById("faixa");
+        var faixaAutoLabel = document.getElementById("faixaAuto");
+
+        function computeFaixa(n) {
+          if (n <= 20000) return "Até 20 mil";
+          if (n <= 100000) return "20 mil a 100 mil";
+          if (n <= 500000) return "100 mil a 500 mil";
+
+          return "Acima de 500 mil";
+        }
+
+        habitantesInput.addEventListener("input", function () {
+          var n = parseInt(this.value);
+
+          if (!isNaN(n)) {
+            var faixa = computeFaixa(n);
+
+            faixaAutoLabel.textContent =
+              "Faixa estimada automaticamente: " + faixa;
+
+            if (!faixaSelect.dataset.userSet) faixaSelect.value = faixa;
+          } else {
+            faixaAutoLabel.textContent =
+              "Faixa populacional estimada aparece aqui.";
+          }
+
+          autosave();
+        });
+
+        faixaSelect.addEventListener("change", function () {
+          faixaSelect.dataset.userSet = "1";
+          autosave();
+        });
+
+        /* =========================================================
+   VALIDAÇÃO
+========================================================= */
+
+        function validateField(field) {
+          if (!field) return true;
+
+          var input = field.querySelector("input,select,textarea");
+
+          var ok = true;
+
+          if (field.dataset.required === "true") {
+            if (input.type === "number")
+              ok = input.value !== "" && Number(input.value) >= 0;
+            else ok = input.value.trim() !== "";
+          }
+
+          field.classList.toggle("invalid", !ok);
+
+          return ok;
+        }
+
+        function validateStep(step) {
+          var area = document.querySelector('.step[data-step="' + step + '"]');
+
+          var ok = true;
+
+          area
+            .querySelectorAll('.field[data-required="true"]')
+            .forEach(function (f) {
+              if (!validateField(f)) ok = false;
+            });
+
+          var email = document.getElementById("contatoEmail");
+
+          if (step === 5 && email.value.trim() !== "") {
+            var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!re.test(email.value.trim())) {
+              document.getElementById("emailErr").style.display = "block";
+              ok = false;
+            }
+          }
+
+          return ok;
+        }
+
+        /* =========================================================
+   AUTOSAVE
+========================================================= */
+
+        document
+          .querySelectorAll("input,textarea,select")
+          .forEach(function (el) {
+            el.addEventListener("input", autosave);
+            el.addEventListener("change", autosave);
+          });
+
+        function collectData() {
+          var data = {};
+
+          new FormData(form).forEach(function (value, key) {
+            if (data[key] !== undefined) {
+              if (Array.isArray(data[key])) data[key].push(value);
+              else data[key] = [data[key], value];
+            } else {
+              data[key] = value;
+            }
+          });
+
+          return {
+            current: current,
+            fields: data,
+            scaleUtil: scaleUtilVal,
+          };
+        }
+
+        var saveTimer = null;
+
+        function autosave() {
+          clearTimeout(saveTimer);
+
+          saveTimer = setTimeout(function () {
+            storageSet(collectData());
+          }, 200);
+        }
+
+        function restore() {
+          var saved = storageGet();
+
+          if (!saved) return;
+
+          Object.keys(saved.fields || {}).forEach(function (key) {
+            var vals = saved.fields[key];
+
+            vals = Array.isArray(vals) ? vals : [vals];
+
+            document
+              .querySelectorAll('[name="' + key + '"]')
+              .forEach(function (input) {
+                if (input.type === "checkbox" || input.type === "radio") {
+                  if (vals.includes(input.value)) {
+                    input.checked = true;
+                    input.dispatchEvent(new Event("change"));
+                  }
+                } else {
+                  input.value = vals[0];
+                }
+              });
+          });
+
+          if (saved.scaleUtil) {
+            scaleUtilVal = saved.scaleUtil;
+
+            document
+              .querySelector(
+                '#scaleUtil button[data-val="' + saved.scaleUtil + '"]',
+              )
+              .classList.add("sel");
+          }
+
+          current = saved.current || 1;
+
+          resumeBanner.classList.add("show");
+
+          render();
+        }
+
+        document
+          .getElementById("btnClearSave")
+          .addEventListener("click", function () {
+            storageClear();
+            form.reset();
+
+            document.querySelectorAll(".opt.checked").forEach(function (o) {
+              o.classList.remove("checked");
+            });
+
+            scaleUtilVal = null;
+            current = 1;
+
+            resumeBanner.classList.remove("show");
+
+            render();
+          });
+
+        /* =========================================================
+   RENDER
+========================================================= */
+
+        function render() {
+          steps.forEach(function (step) {
+            step.classList.toggle(
+              "active",
+              Number(step.dataset.step) === current,
+            );
+          });
+
+          stepLabel.textContent = "Etapa " + current + " de 5";
+
+          remainingLabel.textContent =
+            current === 5
+              ? "última etapa"
+              : "faltam " + (5 - current) + " etapas";
+
+          progressFill.style.width = (current / 5) * 100 + "%";
+
+          stepDots.forEach(function (dot, i) {
+            dot.classList.remove("done", "current");
+
+            if (i + 1 < current) dot.classList.add("done");
+
+            if (i + 1 === current) dot.classList.add("current");
+          });
+
+          btnBack.style.visibility = current === 1 ? "hidden" : "visible";
+
+          btnNext.style.display = current === 5 ? "none" : "inline-flex";
+
+          btnSubmit.style.display = current === 5 ? "inline-flex" : "none";
+        }
+
+        /* =========================================================
+   NAV
+========================================================= */
+
+        btnNext.addEventListener("click", function () {
+          if (!validateStep(current)) return;
+
+          current++;
+
+          render();
+
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        btnBack.addEventListener("click", function () {
+          current--;
+
+          render();
+
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        /* =========================================================
+   SUBMIT SUPABASE
+========================================================= */
+
+        function nullIfEmpty(v) {
+          return v === undefined || v === null || v === "" ? null : v;
+        }
+
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          if (!validateStep(current)) return;
+
+          var payload = collectData();
+          var f = payload.fields;
+
+          btnSubmit.disabled = true;
+
+          var textoOriginal = btnSubmit.textContent;
+
+          btnSubmit.textContent = "Enviando...";
+
+          try {
+            var pesquisaId = crypto.randomUUID();
+
+            /* ---------------- PESQUISA ---------------- */
+
+            var pesquisa = {
+              id: pesquisaId,
+
+              nome: f.nome,
+              cargo: f.cargo,
+              secretaria: nullIfEmpty(f.secretaria),
+              municipio: f.municipio,
+              estado: f.estado,
+
+              habitantes: Number(f.habitantes),
+
+              faixa: nullIfEmpty(f.faixa),
+              porte: nullIfEmpty(f.porte),
+
+              identificacao_outro: nullIfEmpty(f.identificacaoOutro),
+
+              equipes: f.equipes ? Number(f.equipes) : null,
+
+              frequencia_inspecao: nullIfEmpty(f.frequenciaInsp),
+
+              tempo_acao: nullIfEmpty(f.tempoAcao),
+
+              maior_desafio: nullIfEmpty(f.maiorDesafio),
+
+              utilidade_mvp: payload.scaleUtil
+                ? Number(payload.scaleUtil)
+                : null,
+
+              reduz_tempo: nullIfEmpty(f.reduzTempo),
+
+              reduz_custo: nullIfEmpty(f.reduzCusto),
+
+              modulo_outro: nullIfEmpty(f.modulosOutro),
+
+              interesse_demo: nullIfEmpty(f.interesseDemo),
+
+              interesse_piloto: nullIfEmpty(f.interessePiloto),
+
+              decisor: nullIfEmpty(f.decisor),
+
+              previsao_investimento: nullIfEmpty(f.previsaoInvestimento),
+
+              contato_nome: nullIfEmpty(f.contatoNome),
+
+              contato_email: nullIfEmpty(f.contatoEmail),
+
+              contato_telefone: nullIfEmpty(f.contatoTelefone),
+            };
+
+            var r = await supabaseClient.from("pesquisas").insert(pesquisa);
+
+            if (r.error) throw r.error;
+
+            /* ---------------- LIKERT ---------------- */
+
+            var perguntas = [
+              "falta_equipe",
+              "custo_inspecao",
+              "localizar_pontos",
+              "reclamacoes",
+              "info_atualizada",
+              "priorizar",
+              "tempo_execucao",
+            ];
+
+            var likert = [];
+
+            perguntas.forEach(function (p) {
+              var campo = "likert_" + p;
+
+              if (f[campo]) {
+                likert.push({
+                  pesquisa_id: pesquisaId,
+                  pergunta: p,
+                  nota: Number(f[campo]),
+                });
+              }
+            });
+
+            if (likert.length) {
+              var r2 = await supabaseClient
+                .from("pesquisa_likert")
+                .insert(likert);
+
+              if (r2.error) throw r2.error;
+            }
+
+            /* ---------------- IDENTIFICAÇÃO ---------------- */
+
+            var opcoes = [];
+
+            var identificacao = f.identificacao || [];
+
+            if (!Array.isArray(identificacao)) identificacao = [identificacao];
+
+            identificacao.forEach(function (x) {
+              opcoes.push({
+                pesquisa_id: pesquisaId,
+                pergunta: "identificacao",
+                resposta: x,
+              });
+            });
+
+            /* ---------------- MÓDULOS ---------------- */
+
+            var modulos = f.modulos || [];
+
+            if (!Array.isArray(modulos)) modulos = [modulos];
+
+            modulos.forEach(function (x) {
+              opcoes.push({
+                pesquisa_id: pesquisaId,
+                pergunta: "modulos",
+                resposta: x,
+              });
+            });
+
+            if (opcoes.length) {
+              var r3 = await supabaseClient
+                .from("pesquisa_opcoes")
+                .insert(opcoes);
+
+              if (r3.error) throw r3.error;
+            }
+
+            /* ---------------- SUCESSO ---------------- */
+
+            storageClear();
+
+            formArea.style.display = "none";
+
+            resumeBanner.classList.remove("show");
+
+            thankyou.classList.add("active");
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          } catch (err) {
+            console.error(err);
+
+            alert(
+              "Erro ao enviar a pesquisa.\n\n" +
+                "Verifique sua internet e tente novamente.",
+            );
+          } finally {
+            btnSubmit.disabled = false;
+
+            btnSubmit.textContent = textoOriginal;
+          }
+        });
+
+        /* =========================================================
+   SHARE
+========================================================= */
+
+        document
+          .getElementById("btnShare")
+          .addEventListener("click", function () {
+            var url = location.href;
+
+            if (navigator.share) {
+              navigator.share({
+                title: "Pesquisa GreenView",
+                url: url,
+              });
+            } else if (navigator.clipboard) {
+              navigator.clipboard.writeText(url);
+
+              document.getElementById("shareFeedback").textContent =
+                "Link copiado!";
+
+              setTimeout(function () {
+                document.getElementById("shareFeedback").textContent = "";
+              }, 2000);
+            }
+          });
+
+        /* ========================================================= */
+
+        restore();
+        render();
+      })();
+    </script>
+  </body>
 </html>
