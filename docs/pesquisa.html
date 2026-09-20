@@ -724,6 +724,71 @@
         opacity: 0.5;
       }
 
+      .rank-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .rank-list li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border: 1px solid var(--line-strong);
+        border-radius: 8px;
+        padding: 10px 12px;
+        background: #fff;
+      }
+
+      .rank-num {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        color: var(--signal);
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--mist);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+      }
+
+      .rank-label {
+        flex: 1;
+        font-size: 14px;
+      }
+
+      .rank-btns {
+        display: flex;
+        gap: 4px;
+      }
+
+      .rank-btns button {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        border: 1px solid var(--line-strong);
+        background: #fff;
+        font-size: 13px;
+        color: var(--forest);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .rank-btns button:hover {
+        background: var(--mist);
+      }
+
+      .rank-btns button:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+
       @media (prefers-reduced-motion: reduce) {
         * {
           animation-duration: 0.001ms !important;
@@ -817,8 +882,19 @@
 
                   <div class="field" data-required="true">
                     <label>Cargo<span class="req">*</span></label>
-                    <input type="text" name="cargo" required />
-                    <span class="errmsg">Informe seu cargo.</span>
+                    <select name="cargo" required>
+                      <option value="">Selecione</option>
+                      <option>Prefeito(a)</option>
+                      <option>Secretário(a) de Obras</option>
+                      <option>Secretário(a) de Meio Ambiente</option>
+                      <option>Secretário(a) de Planejamento</option>
+                      <option>Secretário(a) de Infraestrutura</option>
+                      <option>Engenheiro(a) municipal</option>
+                      <option>Tecnologia / TI</option>
+                      <option>Fiscalização</option>
+                      <option>Outro</option>
+                    </select>
+                    <span class="errmsg">Selecione seu cargo.</span>
                   </div>
                 </div>
 
@@ -874,61 +950,17 @@
                   </div>
 
                   <div class="field" data-required="true">
-                    <label
-                      >Número aproximado de habitantes<span class="req"
-                        >*</span
-                      ></label
-                    >
+                    <label>Faixa populacional<span class="req">*</span></label>
 
-                    <input
-                      type="number"
-                      id="habitantes"
-                      name="habitantes"
-                      min="0"
-                      required
-                    />
+                    <select id="faixa" name="faixa" required>
+                      <option value="">Selecione</option>
+                      <option>Até 20 mil habitantes</option>
+                      <option>20 mil a 100 mil habitantes</option>
+                      <option>100 mil a 500 mil habitantes</option>
+                      <option>Acima de 500 mil habitantes</option>
+                    </select>
 
-                    <span class="hint" id="faixaAuto">
-                      Faixa populacional estimada aparece aqui.
-                    </span>
-
-                    <span class="errmsg">Informe um número válido.</span>
-                  </div>
-                </div>
-
-                <div class="field">
-                  <label>Faixa populacional</label>
-
-                  <select id="faixa" name="faixa">
-                    <option value="">
-                      Selecione ou deixe em branco para preenchimento automático
-                    </option>
-                    <option>Até 20 mil</option>
-                    <option>20 mil a 100 mil</option>
-                    <option>100 mil a 500 mil</option>
-                    <option>Acima de 500 mil</option>
-                  </select>
-                </div>
-
-                <div class="field">
-                  <label>Seu município é:</label>
-
-                  <div class="opt-grid cols3">
-                    <label class="opt"
-                      ><input type="radio" name="porte" value="Pequeno" /><span
-                        >Pequeno</span
-                      ></label
-                    >
-                    <label class="opt"
-                      ><input type="radio" name="porte" value="Médio" /><span
-                        >Médio</span
-                      ></label
-                    >
-                    <label class="opt"
-                      ><input type="radio" name="porte" value="Grande" /><span
-                        >Grande</span
-                      ></label
-                    >
+                    <span class="errmsg">Selecione a faixa populacional.</span>
                   </div>
                 </div>
               </div>
@@ -1076,6 +1108,94 @@
                     >
                   </div>
                 </div>
+
+                <div class="field">
+                  <label
+                    >Quanto a prefeitura gasta hoje, por ano, com
+                    fiscalização/limpeza relacionada a esse problema?</label
+                  >
+
+                  <div class="opt-grid">
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="custoAnual"
+                        value="Menos de R$ 50 mil"
+                      /><span>Menos de R$ 50 mil</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="custoAnual"
+                        value="R$ 50 mil a R$ 200 mil"
+                      /><span>R$ 50 mil a R$ 200 mil</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="custoAnual"
+                        value="R$ 200 mil a R$ 1 milhão"
+                      /><span>R$ 200 mil a R$ 1 milhão</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="custoAnual"
+                        value="Não sei informar"
+                      /><span>Não sei informar</span></label
+                    >
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label
+                    >Quanto a prefeitura já investiu tentando resolver esse
+                    problema nos últimos 3 anos (equipamentos, contratos,
+                    sistemas etc.)?</label
+                  >
+
+                  <div class="opt-grid">
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="investimento3anos"
+                        value="Menos de R$ 50 mil"
+                      /><span>Menos de R$ 50 mil</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="investimento3anos"
+                        value="R$ 50 mil a R$ 200 mil"
+                      /><span>R$ 50 mil a R$ 200 mil</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="investimento3anos"
+                        value="R$ 200 mil a R$ 1 milhão"
+                      /><span>R$ 200 mil a R$ 1 milhão</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="investimento3anos"
+                        value="Mais de R$ 1 milhão"
+                      /><span>Mais de R$ 1 milhão</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="investimento3anos"
+                        value="Não investimos ainda"
+                      /><span>Não investimos ainda</span></label
+                    >
+                  </div>
+                  <span class="hint"
+                    >Serve como parâmetro para precificação — não como
+                    cobrança.</span
+                  >
+                </div>
               </div>
 
               <!-- STEP 3 -->
@@ -1084,334 +1204,106 @@
                 <div class="step-intro">
                   <span class="eyebrow">Etapa 3</span>
                   <h2>Dores e desafios</h2>
-                  <p>Avalie cada desafio.</p>
+                  <p>Antes de qualquer lista, queremos ouvir na sua palavra.</p>
                 </div>
 
-                <div id="likertGroup">
-                  <div class="likert-row">
-                    <div class="lq">Falta de equipe</div>
-                    <div class="likert-scale">
-                      <span class="lend">Nada</span>
-                      <div class="likert-opts">
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_falta_equipe"
-                            value="1"
-                          /><span>1</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_falta_equipe"
-                            value="2"
-                          /><span>2</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_falta_equipe"
-                            value="3"
-                          /><span>3</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_falta_equipe"
-                            value="4"
-                          /><span>4</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_falta_equipe"
-                            value="5"
-                          /><span>5</span></label
-                        >
-                      </div>
-                      <span class="lend">Muito</span>
-                    </div>
-                  </div>
-
-                  <div class="likert-row">
-                    <div class="lq">Alto custo das inspeções</div>
-                    <div class="likert-scale">
-                      <span class="lend">Nada</span>
-                      <div class="likert-opts">
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_custo_inspecao"
-                            value="1"
-                          /><span>1</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_custo_inspecao"
-                            value="2"
-                          /><span>2</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_custo_inspecao"
-                            value="3"
-                          /><span>3</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_custo_inspecao"
-                            value="4"
-                          /><span>4</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_custo_inspecao"
-                            value="5"
-                          /><span>5</span></label
-                        >
-                      </div>
-                      <span class="lend">Muito</span>
-                    </div>
-                  </div>
-
-                  <div class="likert-row">
-                    <div class="lq">
-                      Dificuldade em localizar todos os pontos
-                    </div>
-                    <div class="likert-scale">
-                      <span class="lend">Nada</span>
-                      <div class="likert-opts">
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_localizar_pontos"
-                            value="1"
-                          /><span>1</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_localizar_pontos"
-                            value="2"
-                          /><span>2</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_localizar_pontos"
-                            value="3"
-                          /><span>3</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_localizar_pontos"
-                            value="4"
-                          /><span>4</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_localizar_pontos"
-                            value="5"
-                          /><span>5</span></label
-                        >
-                      </div>
-                      <span class="lend">Muito</span>
-                    </div>
-                  </div>
-
-                  <div class="likert-row">
-                    <div class="lq">Reclamações frequentes da população</div>
-                    <div class="likert-scale">
-                      <span class="lend">Nada</span>
-                      <div class="likert-opts">
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_reclamacoes"
-                            value="1"
-                          /><span>1</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_reclamacoes"
-                            value="2"
-                          /><span>2</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_reclamacoes"
-                            value="3"
-                          /><span>3</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_reclamacoes"
-                            value="4"
-                          /><span>4</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_reclamacoes"
-                            value="5"
-                          /><span>5</span></label
-                        >
-                      </div>
-                      <span class="lend">Muito</span>
-                    </div>
-                  </div>
-
-                  <div class="likert-row">
-                    <div class="lq">Falta de informações atualizadas</div>
-                    <div class="likert-scale">
-                      <span class="lend">Nada</span>
-                      <div class="likert-opts">
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_info_atualizada"
-                            value="1"
-                          /><span>1</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_info_atualizada"
-                            value="2"
-                          /><span>2</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_info_atualizada"
-                            value="3"
-                          /><span>3</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_info_atualizada"
-                            value="4"
-                          /><span>4</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_info_atualizada"
-                            value="5"
-                          /><span>5</span></label
-                        >
-                      </div>
-                      <span class="lend">Muito</span>
-                    </div>
-                  </div>
-
-                  <div class="likert-row">
-                    <div class="lq">Dificuldade em priorizar atendimentos</div>
-                    <div class="likert-scale">
-                      <span class="lend">Nada</span>
-                      <div class="likert-opts">
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_priorizar"
-                            value="1"
-                          /><span>1</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_priorizar"
-                            value="2"
-                          /><span>2</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_priorizar"
-                            value="3"
-                          /><span>3</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_priorizar"
-                            value="4"
-                          /><span>4</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_priorizar"
-                            value="5"
-                          /><span>5</span></label
-                        >
-                      </div>
-                      <span class="lend">Muito</span>
-                    </div>
-                  </div>
-
-                  <div class="likert-row">
-                    <div class="lq">Tempo entre identificação e execução</div>
-                    <div class="likert-scale">
-                      <span class="lend">Nada</span>
-                      <div class="likert-opts">
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_tempo_execucao"
-                            value="1"
-                          /><span>1</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_tempo_execucao"
-                            value="2"
-                          /><span>2</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_tempo_execucao"
-                            value="3"
-                          /><span>3</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_tempo_execucao"
-                            value="4"
-                          /><span>4</span></label
-                        >
-                        <label
-                          ><input
-                            type="radio"
-                            name="likert_tempo_execucao"
-                            value="5"
-                          /><span>5</span></label
-                        >
-                      </div>
-                      <span class="lend">Muito</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="field">
+                <div class="field" data-required="true">
                   <label
                     >Qual é hoje o maior desafio relacionado ao monitoramento
-                    urbano?</label
+                    urbano na sua prefeitura?<span class="req">*</span></label
                   >
-                  <textarea name="maiorDesafio" rows="3"></textarea>
+                  <textarea
+                    name="maiorDesafio"
+                    rows="3"
+                    placeholder="Responda antes de ver a lista abaixo — queremos sua percepção espontânea."
+                    required
+                  ></textarea>
+                  <span class="errmsg">Conte pra gente em poucas palavras.</span>
+                </div>
+
+                <div
+                  class="field"
+                  style="
+                    margin-top: 30px;
+                    padding-top: 24px;
+                    border-top: 1px solid var(--line);
+                  "
+                >
+                  <label
+                    >Agora, ordene os itens abaixo do maior para o menor
+                    desafio</label
+                  >
+                  <span class="hint" style="margin-bottom: 14px; display: block"
+                    >Use as setas para reordenar. O item no topo é o que mais
+                    pesa hoje.</span
+                  >
+
+                  <ol class="rank-list" id="rankList">
+                    <li data-value="falta_equipe" data-field="likert_falta_equipe">
+                      <span class="rank-num"></span>
+                      <span class="rank-label">Falta de equipe</span>
+                      <div class="rank-btns">
+                        <button type="button" class="rank-up" aria-label="Mover para cima">↑</button>
+                        <button type="button" class="rank-down" aria-label="Mover para baixo">↓</button>
+                      </div>
+                      <input type="hidden" name="likert_falta_equipe" value="1" />
+                    </li>
+                    <li data-value="custo_inspecao" data-field="likert_custo_inspecao">
+                      <span class="rank-num"></span>
+                      <span class="rank-label">Alto custo das inspeções</span>
+                      <div class="rank-btns">
+                        <button type="button" class="rank-up" aria-label="Mover para cima">↑</button>
+                        <button type="button" class="rank-down" aria-label="Mover para baixo">↓</button>
+                      </div>
+                      <input type="hidden" name="likert_custo_inspecao" value="2" />
+                    </li>
+                    <li data-value="localizar_pontos" data-field="likert_localizar_pontos">
+                      <span class="rank-num"></span>
+                      <span class="rank-label">Dificuldade em localizar todos os pontos</span>
+                      <div class="rank-btns">
+                        <button type="button" class="rank-up" aria-label="Mover para cima">↑</button>
+                        <button type="button" class="rank-down" aria-label="Mover para baixo">↓</button>
+                      </div>
+                      <input type="hidden" name="likert_localizar_pontos" value="3" />
+                    </li>
+                    <li data-value="reclamacoes" data-field="likert_reclamacoes">
+                      <span class="rank-num"></span>
+                      <span class="rank-label">Reclamações frequentes da população</span>
+                      <div class="rank-btns">
+                        <button type="button" class="rank-up" aria-label="Mover para cima">↑</button>
+                        <button type="button" class="rank-down" aria-label="Mover para baixo">↓</button>
+                      </div>
+                      <input type="hidden" name="likert_reclamacoes" value="4" />
+                    </li>
+                    <li data-value="info_atualizada" data-field="likert_info_atualizada">
+                      <span class="rank-num"></span>
+                      <span class="rank-label">Falta de informações atualizadas</span>
+                      <div class="rank-btns">
+                        <button type="button" class="rank-up" aria-label="Mover para cima">↑</button>
+                        <button type="button" class="rank-down" aria-label="Mover para baixo">↓</button>
+                      </div>
+                      <input type="hidden" name="likert_info_atualizada" value="5" />
+                    </li>
+                    <li data-value="priorizar" data-field="likert_priorizar">
+                      <span class="rank-num"></span>
+                      <span class="rank-label">Dificuldade em priorizar atendimentos</span>
+                      <div class="rank-btns">
+                        <button type="button" class="rank-up" aria-label="Mover para cima">↑</button>
+                        <button type="button" class="rank-down" aria-label="Mover para baixo">↓</button>
+                      </div>
+                      <input type="hidden" name="likert_priorizar" value="6" />
+                    </li>
+                    <li data-value="tempo_execucao" data-field="likert_tempo_execucao">
+                      <span class="rank-num"></span>
+                      <span class="rank-label">Tempo entre identificação e execução</span>
+                      <div class="rank-btns">
+                        <button type="button" class="rank-up" aria-label="Mover para cima">↑</button>
+                        <button type="button" class="rank-down" aria-label="Mover para baixo">↓</button>
+                      </div>
+                      <input type="hidden" name="likert_tempo_execucao" value="7" />
+                    </li>
+                  </ol>
+                  <input type="hidden" name="rankingOrder" id="rankingOrderInput" />
                 </div>
               </div>
 
@@ -1454,7 +1346,10 @@
 
                 <div class="row2">
                   <div class="field">
-                    <label>Reduziria o tempo de fiscalização?</label>
+                    <label
+                      >Comparado ao processo atual, essa abordagem
+                      seria:</label
+                    >
 
                     <div
                       class="opt-grid cols3"
@@ -1464,28 +1359,30 @@
                         ><input
                           type="radio"
                           name="reduzTempo"
-                          value="Sim"
-                        /><span>Sim</span></label
+                          value="Mais rápida"
+                        /><span>Mais rápida</span></label
                       >
                       <label class="opt"
                         ><input
                           type="radio"
                           name="reduzTempo"
-                          value="Parcialmente"
-                        /><span>Parcial.</span></label
+                          value="Igual"
+                        /><span>Igual</span></label
                       >
                       <label class="opt"
                         ><input
                           type="radio"
                           name="reduzTempo"
-                          value="Não"
-                        /><span>Não</span></label
+                          value="Mais lenta"
+                        /><span>Mais lenta</span></label
                       >
                     </div>
                   </div>
 
                   <div class="field">
-                    <label>Reduziria custos?</label>
+                    <label
+                      >E o custo, comparado ao processo atual, seria:</label
+                    >
 
                     <div
                       class="opt-grid cols3"
@@ -1495,29 +1392,47 @@
                         ><input
                           type="radio"
                           name="reduzCusto"
-                          value="Sim"
-                        /><span>Sim</span></label
+                          value="Menor"
+                        /><span>Menor</span></label
                       >
                       <label class="opt"
                         ><input
                           type="radio"
                           name="reduzCusto"
-                          value="Parcialmente"
-                        /><span>Parcial.</span></label
+                          value="Igual"
+                        /><span>Igual</span></label
                       >
                       <label class="opt"
                         ><input
                           type="radio"
                           name="reduzCusto"
-                          value="Não"
-                        /><span>Não</span></label
+                          value="Maior"
+                        /><span>Maior</span></label
                       >
                     </div>
                   </div>
                 </div>
 
                 <div class="field">
-                  <label>Quais módulos seriam mais interessantes?</label>
+                  <label>Por quê?</label>
+                  <textarea
+                    name="porqueComparativo"
+                    rows="2"
+                    placeholder="Resposta aberta"
+                  ></textarea>
+                </div>
+
+                <div class="field">
+                  <label
+                    >Quais módulos seriam mais interessantes? Escolha até
+                    3 prioridades.</label
+                  >
+                  <span
+                    class="hint limit-msg"
+                    id="moduloLimitMsg"
+                    style="color: var(--amber); display: none"
+                    >Você já escolheu 3. Desmarque um módulo para trocar.</span
+                  >
 
                   <div class="opt-grid">
                     <label class="opt"
@@ -1711,6 +1626,44 @@
                   </div>
                 </div>
 
+                <div class="field">
+                  <label
+                    >Como esse tipo de solução normalmente seria contratada
+                    pela sua prefeitura?</label
+                  >
+
+                  <div class="opt-grid">
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="modalidadeContratacao"
+                        value="Licitação"
+                      /><span>Licitação</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="modalidadeContratacao"
+                        value="Dispensa de licitação"
+                      /><span>Dispensa de licitação</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="modalidadeContratacao"
+                        value="Inexigibilidade"
+                      /><span>Inexigibilidade</span></label
+                    >
+                    <label class="opt"
+                      ><input
+                        type="radio"
+                        name="modalidadeContratacao"
+                        value="Não sei informar"
+                      /><span>Não sei informar</span></label
+                    >
+                  </div>
+                </div>
+
                 <div
                   class="field"
                   style="
@@ -1719,30 +1672,33 @@
                     border-top: 1px solid var(--line);
                   "
                 >
-                  <label
-                    >Caso deseje receber novidades sobre o GreenView:</label
-                  >
+                  <label class="opt" style="display: inline-flex; padding: 12px 14px">
+                    <input type="checkbox" id="wantsReport" name="quiseReceberRelatorio" value="Sim" />
+                    <span>Quero receber o relatório com os resultados desta pesquisa</span>
+                  </label>
 
-                  <div class="row3">
-                    <input type="text" name="contatoNome" placeholder="Nome" />
+                  <div class="conditional" id="reportContactWrap" style="margin-top: 14px">
+                    <div class="row3">
+                      <input type="text" name="contatoNome" placeholder="Nome" />
 
-                    <input
-                      type="email"
-                      id="contatoEmail"
-                      name="contatoEmail"
-                      placeholder="E-mail institucional"
-                    />
+                      <input
+                        type="email"
+                        id="contatoEmail"
+                        name="contatoEmail"
+                        placeholder="E-mail institucional"
+                      />
 
-                    <input
-                      type="tel"
-                      name="contatoTelefone"
-                      placeholder="Telefone"
-                    />
+                      <input
+                        type="tel"
+                        name="contatoTelefone"
+                        placeholder="Telefone"
+                      />
+                    </div>
+
+                    <span class="errmsg" id="emailErr"
+                      >Informe um e-mail válido.</span
+                    >
                   </div>
-
-                  <span class="errmsg" id="emailErr"
-                    >Informe um e-mail válido.</span
-                  >
                 </div>
               </div>
 
@@ -1925,6 +1881,86 @@
 
         bindConditional("identOutroChk", "identOutroWrap");
         bindConditional("moduloOutroChk", "moduloOutroWrap");
+        bindConditional("wantsReport", "reportContactWrap");
+
+        /* =========================================================
+   RANKING (ETAPA 3)
+========================================================= */
+
+        var rankList = document.getElementById("rankList");
+        var originalRankOrder = Array.from(rankList.children).map(function (
+          li,
+        ) {
+          return li.dataset.value;
+        });
+
+        function renderRanking() {
+          var items = Array.from(rankList.children);
+
+          items.forEach(function (li, i) {
+            li.querySelector(".rank-num").textContent = i + 1;
+            li.querySelector(".rank-up").disabled = i === 0;
+            li.querySelector(".rank-down").disabled = i === items.length - 1;
+            li.querySelector('input[type="hidden"][name^="likert_"]').value =
+              i + 1;
+          });
+
+          document.getElementById("rankingOrderInput").value = items
+            .map(function (li) {
+              return li.dataset.value;
+            })
+            .join("|");
+        }
+
+        rankList.addEventListener("click", function (e) {
+          var btn = e.target.closest("button");
+          if (!btn) return;
+
+          var li = btn.closest("li");
+
+          if (btn.classList.contains("rank-up") && li.previousElementSibling) {
+            rankList.insertBefore(li, li.previousElementSibling);
+          } else if (
+            btn.classList.contains("rank-down") &&
+            li.nextElementSibling
+          ) {
+            rankList.insertBefore(li.nextElementSibling, li);
+          }
+
+          renderRanking();
+          autosave();
+        });
+
+        renderRanking();
+
+        /* =========================================================
+   MÓDULOS (limite de 3)
+========================================================= */
+
+        var moduloLimitMsg = document.getElementById("moduloLimitMsg");
+
+        document
+          .querySelectorAll('input[name="modulos"]')
+          .forEach(function (input) {
+            input.addEventListener("change", function () {
+              var checked = document.querySelectorAll(
+                'input[name="modulos"]:checked',
+              );
+
+              if (checked.length > 3) {
+                input.checked = false;
+                input.closest(".opt").classList.remove("checked");
+
+                if (moduloLimitMsg) {
+                  moduloLimitMsg.style.display = "block";
+                  clearTimeout(moduloLimitMsg._t);
+                  moduloLimitMsg._t = setTimeout(function () {
+                    moduloLimitMsg.style.display = "none";
+                  }, 2500);
+                }
+              }
+            });
+          });
 
         /* =========================================================
    SCALE
@@ -1945,45 +1981,6 @@
 
             autosave();
           });
-
-        /* =========================================================
-   FAIXA
-========================================================= */
-
-        var habitantesInput = document.getElementById("habitantes");
-        var faixaSelect = document.getElementById("faixa");
-        var faixaAutoLabel = document.getElementById("faixaAuto");
-
-        function computeFaixa(n) {
-          if (n <= 20000) return "Até 20 mil";
-          if (n <= 100000) return "20 mil a 100 mil";
-          if (n <= 500000) return "100 mil a 500 mil";
-
-          return "Acima de 500 mil";
-        }
-
-        habitantesInput.addEventListener("input", function () {
-          var n = parseInt(this.value);
-
-          if (!isNaN(n)) {
-            var faixa = computeFaixa(n);
-
-            faixaAutoLabel.textContent =
-              "Faixa estimada automaticamente: " + faixa;
-
-            if (!faixaSelect.dataset.userSet) faixaSelect.value = faixa;
-          } else {
-            faixaAutoLabel.textContent =
-              "Faixa populacional estimada aparece aqui.";
-          }
-
-          autosave();
-        });
-
-        faixaSelect.addEventListener("change", function () {
-          faixaSelect.dataset.userSet = "1";
-          autosave();
-        });
 
         /* =========================================================
    VALIDAÇÃO
@@ -2019,11 +2016,19 @@
             });
 
           var email = document.getElementById("contatoEmail");
+          var wantsReport = document.getElementById("wantsReport");
 
-          if (step === 5 && email.value.trim() !== "") {
+          if (step === 5 && wantsReport.checked && email.value.trim() === "") {
+            document.getElementById("emailErr").textContent =
+              "Informe seu e-mail para receber o relatório.";
+            document.getElementById("emailErr").style.display = "block";
+            ok = false;
+          } else if (step === 5 && email.value.trim() !== "") {
             var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
             if (!re.test(email.value.trim())) {
+              document.getElementById("emailErr").textContent =
+                "Informe um e-mail válido.";
               document.getElementById("emailErr").style.display = "block";
               ok = false;
             }
@@ -2096,6 +2101,17 @@
               });
           });
 
+          if (saved.fields && saved.fields.rankingOrder) {
+            String(saved.fields.rankingOrder)
+              .split("|")
+              .forEach(function (key) {
+                var li = rankList.querySelector('li[data-value="' + key + '"]');
+                if (li) rankList.appendChild(li);
+              });
+          }
+
+          renderRanking();
+
           if (saved.scaleUtil) {
             scaleUtilVal = saved.scaleUtil;
 
@@ -2125,6 +2141,12 @@
 
             scaleUtilVal = null;
             current = 1;
+
+            originalRankOrder.forEach(function (key) {
+              var li = rankList.querySelector('li[data-value="' + key + '"]');
+              if (li) rankList.appendChild(li);
+            });
+            renderRanking();
 
             resumeBanner.classList.remove("show");
 
@@ -2238,6 +2260,10 @@
 
               tempo_acao: nullIfEmpty(f.tempoAcao),
 
+              custo_anual: nullIfEmpty(f.custoAnual),
+
+              investimento_3_anos: nullIfEmpty(f.investimento3anos),
+
               maior_desafio: nullIfEmpty(f.maiorDesafio),
 
               utilidade_mvp: payload.scaleUtil
@@ -2248,6 +2274,8 @@
 
               reduz_custo: nullIfEmpty(f.reduzCusto),
 
+              porque_comparativo: nullIfEmpty(f.porqueComparativo),
+
               modulo_outro: nullIfEmpty(f.modulosOutro),
 
               interesse_demo: nullIfEmpty(f.interesseDemo),
@@ -2257,6 +2285,10 @@
               decisor: nullIfEmpty(f.decisor),
 
               previsao_investimento: nullIfEmpty(f.previsaoInvestimento),
+
+              modalidade_contratacao: nullIfEmpty(f.modalidadeContratacao),
+
+              quer_relatorio: nullIfEmpty(f.quiseReceberRelatorio),
 
               contato_nome: nullIfEmpty(f.contatoNome),
 
