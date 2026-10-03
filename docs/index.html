@@ -190,11 +190,21 @@
     aspect-ratio:16/10;border-radius:10px;border:1px solid rgba(255,255,255,.1);
     background:linear-gradient(135deg, #0E362F, #123F35);
     position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+  }
+  .mvp-video--vertical{
+    aspect-ratio:9/16;max-width:300px;margin:0 auto;
+  }
+  .mvp-video img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  }
+  .mvp-video iframe{
+    position:absolute;inset:0;width:100%;height:100%;border:0;
   }
   .playbtn{
     width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.12);
     border:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;
-    backdrop-filter:blur(4px);
+    backdrop-filter:blur(4px);position:relative;z-index:1;
   }
   .mvp-list{margin-top:26px;display:flex;flex-direction:column;gap:14px;}
   .mvp-list li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;list-style:none;opacity:.85;}
@@ -424,13 +434,13 @@
     <div class="wrap mvp-grid">
       <div class="reveal">
         <div class="mvp-card">
-          <div class="mvp-video">
-            <button class="playbtn" aria-label="Reproduzir vídeo de demonstração do MVP">
+          <div class="mvp-video mvp-video--vertical" id="mvpVideo" data-yt-id="GTytVJlFIBk" role="button" tabindex="0" aria-label="Reproduzir vídeo de demonstração do MVP GreenView">
+            <img src="mvp-video-poster-shorts.png" alt="Capa do vídeo de demonstração do MVP GreenView" loading="lazy">
+            <button class="playbtn" aria-hidden="true" tabindex="-1">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 5.5V18.5L19 12L7 5.5Z" fill="#fff"/></svg>
             </button>
           </div>
         </div>
-        <p class="mono" style="font-size:11.5px;opacity:.55;margin-top:12px;">Espaço reservado para vídeo/GIF de demonstração do MVP em operação.</p>
       </div>
       <div class="reveal" style="animation-delay:.1s">
         <span class="eyebrow">MVP em operação</span>
@@ -660,6 +670,30 @@
   });
 
   render();
+})();
+
+// ---------- MVP video: click-to-load YouTube embed ----------
+(function(){
+  var videoEl = document.getElementById('mvpVideo');
+  if(!videoEl) return;
+  function loadVideo(){
+    var id = videoEl.dataset.ytId;
+    var iframe = document.createElement('iframe');
+    iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+    iframe.title = 'Vídeo de demonstração do MVP GreenView';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    iframe.allowFullscreen = true;
+    iframe.loading = 'lazy';
+    videoEl.innerHTML = '';
+    videoEl.appendChild(iframe);
+    videoEl.removeEventListener('click', loadVideo);
+    videoEl.removeEventListener('keydown', onKey);
+  }
+  function onKey(e){
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); loadVideo(); }
+  }
+  videoEl.addEventListener('click', loadVideo);
+  videoEl.addEventListener('keydown', onKey);
 })();
 </script>
 
