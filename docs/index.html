@@ -434,11 +434,15 @@
     <div class="wrap mvp-grid">
       <div class="reveal">
         <div class="mvp-card">
-          <div class="mvp-video mvp-video--vertical" id="mvpVideo" data-yt-id="GTytVJlFIBk" role="button" tabindex="0" aria-label="Reproduzir vídeo de demonstração do MVP GreenView">
-            <img src="mvp-video-poster-shorts.png" alt="Capa do vídeo de demonstração do MVP GreenView" loading="lazy">
-            <button class="playbtn" aria-hidden="true" tabindex="-1">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 5.5V18.5L19 12L7 5.5Z" fill="#fff"/></svg>
-            </button>
+          <div class="mvp-video mvp-video--vertical" id="mvpVideo" aria-label="Vídeo de demonstração do MVP GreenView">
+            <iframe
+              id="mvpPlayer"
+              title="Vídeo de demonstração do MVP GreenView"
+              loading="eager"
+              referrerpolicy="no-referrer-when-downgrade"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen>
+            </iframe>
           </div>
         </div>
       </div>
@@ -599,7 +603,8 @@
 
   // ---------- scale 1-5 ----------
   var scaleVal = null;
-  document.getElementById('scaleGroup').addEventListener('click', function(e){
+  var scaleGroup = document.getElementById('scaleGroup');
+  if(scaleGroup) scaleGroup.addEventListener('click', function(e){
     var btn = e.target.closest('button');
     if(!btn) return;
     scaleVal = btn.dataset.val;
@@ -617,6 +622,12 @@
   var btnSubmit = document.getElementById('btnSubmit');
   var form = document.getElementById('valForm');
   var thankyou = document.getElementById('thankyou');
+
+  // O formulário existe apenas em pesquisa.html. No index.html, encerra
+  // somente a lógica do wizard e permite que o player continue carregando.
+  if(!btnBack || !btnNext || !btnSubmit || !form || !stepLabel || !progressFill || !thankyou){
+    return;
+  }
 
   function render(){
     steps.forEach(function(s){ s.classList.toggle('active', Number(s.dataset.step) === current); });
@@ -672,28 +683,17 @@
   render();
 })();
 
-// ---------- MVP video: click-to-load YouTube embed ----------
+// O vídeo é exibido dentro da própria página. A origem é adicionada dinamicamente
+// porque o YouTube retorna o erro 153 quando o player não recebe a origem do site.
 (function(){
-  var videoEl = document.getElementById('mvpVideo');
-  if(!videoEl) return;
-  function loadVideo(){
-    var id = videoEl.dataset.ytId;
-    var iframe = document.createElement('iframe');
-    iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
-    iframe.title = 'Vídeo de demonstração do MVP GreenView';
-    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-    iframe.allowFullscreen = true;
-    iframe.loading = 'lazy';
-    videoEl.innerHTML = '';
-    videoEl.appendChild(iframe);
-    videoEl.removeEventListener('click', loadVideo);
-    videoEl.removeEventListener('keydown', onKey);
+  var player = document.getElementById('mvpPlayer');
+  if(!player) return;
+  var params = 'rel=0&modestbranding=1&playsinline=1';
+  if(window.location.protocol === 'http:' || window.location.protocol === 'https'){
+    params += '&origin=' + encodeURIComponent(window.location.origin);
+    params += '&widget_referrer=' + encodeURIComponent(window.location.href);
   }
-  function onKey(e){
-    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); loadVideo(); }
-  }
-  videoEl.addEventListener('click', loadVideo);
-  videoEl.addEventListener('keydown', onKey);
+  player.src = 'https://www.youtube.com/embed/GTytVJlFIBk?' + params;
 })();
 </script>
 

@@ -1347,21 +1347,15 @@
                 <div
                   class="mvp-video mvp-video--vertical"
                   id="mvpVideo"
-                  data-yt-id="GTytVJlFIBk"
-                  role="button"
-                  tabindex="0"
-                  aria-label="Reproduzir vídeo de demonstração do MVP GreenView"
+                  aria-label="Vídeo de demonstração do MVP GreenView"
                 >
-                  <img
-                    src="mvp-video-poster-shorts.png"
-                    alt="Capa do vídeo de demonstração do MVP GreenView"
-                    loading="lazy"
-                  />
-                  <button type="button" class="playbtn" aria-hidden="true" tabindex="-1">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                      <path d="M7 5.5V18.5L19 12L7 5.5Z" fill="#fff" />
-                    </svg>
-                  </button>
+                  <iframe
+                    src="https://www.youtube-nocookie.com/embed/GTytVJlFIBk?rel=0&modestbranding=1&playsinline=1"
+                    title="Vídeo de demonstração do MVP GreenView"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen
+                    loading="eager"
+                  ></iframe>
                 </div>
 
                 <div class="field">
@@ -2285,7 +2279,11 @@
               municipio: f.municipio,
               estado: f.estado,
 
-              habitantes: Number(f.habitantes),
+              // Esses campos não são exibidos no formulário atual.
+              // Enviar null evita Number(undefined) = NaN e mantém o schema do BD.
+              habitantes: nullIfEmpty(f.habitantes)
+                ? Number(f.habitantes)
+                : null,
 
               faixa: nullIfEmpty(f.faixa),
               porte: nullIfEmpty(f.porte),
@@ -2463,40 +2461,10 @@
           });
 
         /* =========================================================
-   VÍDEO DO MVP (click-to-load)
-========================================================= */
-
-        var mvpVideoEl = document.getElementById("mvpVideo");
-
-        if (mvpVideoEl) {
-          var loadMvpVideo = function () {
-            var id = mvpVideoEl.dataset.ytId;
-            var iframe = document.createElement("iframe");
-            iframe.src =
-              "https://www.youtube-nocookie.com/embed/" +
-              id +
-              "?autoplay=1&rel=0&modestbranding=1&playsinline=1";
-            iframe.title = "Vídeo de demonstração do MVP GreenView";
-            iframe.allow =
-              "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-            iframe.allowFullscreen = true;
-            iframe.loading = "lazy";
-            mvpVideoEl.innerHTML = "";
-            mvpVideoEl.appendChild(iframe);
-            mvpVideoEl.removeEventListener("click", loadMvpVideo);
-            mvpVideoEl.removeEventListener("keydown", onMvpVideoKey);
-          };
-
-          var onMvpVideoKey = function (e) {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              loadMvpVideo();
-            }
-          };
-
-          mvpVideoEl.addEventListener("click", loadMvpVideo);
-          mvpVideoEl.addEventListener("keydown", onMvpVideoKey);
-        }
+           VÍDEO DO MVP
+           O iframe é carregado diretamente no HTML para funcionar sem
+           depender de capa local ou de um clique inicial.
+        ========================================================= */
 
         /* ========================================================= */
 
